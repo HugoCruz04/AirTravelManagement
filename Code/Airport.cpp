@@ -29,3 +29,11 @@ int Airport::getFlightsNum() const {
     return uniqueCombinations.size();
 }
 
+int Airport::getAirlinesNum() const {
+    std::set<string> uniqueCombinations;
+    for (Flight flight : flights) {
+        uniqueCombinations.insert(flight.getAirline());
+    }
+    return uniqueCombinations.size();
+}
+

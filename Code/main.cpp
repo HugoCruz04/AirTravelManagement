@@ -8,13 +8,16 @@ int main(int argc, char* argv[]){
     network.readFlights("dataset/flights.csv");
 
     for(auto a: network.getAirports()){
-        cout<<a.getName()<<' ';
+        cout<<"airport name: "<<a.getName()<<"\nflights num: "<<a.getFlightsNum()<<"\nairlines num: "<<a.getAirlinesNum()<<endl;
+
         for(auto f: a.getFlights()){
             cout<<f.getSource()<<" "<<f.getTarget()<<" "<<f.getAirline()<<endl;
         }
+
         cout<< endl;
     }
     cout<<"nr of airports: "<<network.getAirportsNum()<<endl;
     cout<<"nr of flights: "<<network.getFligthsNum()<<endl;
+
 
 }

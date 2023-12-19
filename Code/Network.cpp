@@ -123,12 +123,12 @@ void Network::readAirlines(const std::string fileName) {
         }
     }
 }
-int Network::getAirportsNum() {
+int Network::getAirportsNum() const {
     int num = Airports.size();
     return num;
 }
 
-int Network::getFligthsNum() {
+int Network::getFligthsNum() const {
     int num=0;
     for(const Airport& air: Airports) {
         num+=air.getFlightsNum();

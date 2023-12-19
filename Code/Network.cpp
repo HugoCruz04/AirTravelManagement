@@ -135,3 +135,25 @@ int Network::getFligthsNum() const {
     }
     return num;
 }
+
+int Network::getFligthsNumPerCity(const std::string& city) const {
+    int num=0;
+    for(Airport airport:Airports) {
+        if(airport.getCity()==city) {
+            num+=airport.getFlightsNum();
+        }
+    }
+    return num;
+}
+
+int Network::getFligthsNumPerAirline(const std::string& airlinecode) const {
+    int num=0;
+    for(Airport airport:Airports) {
+        for(Flight flight: airport.getFlights()) {
+            if(flight.getAirline()==airlinecode) {
+                num++;
+            }
+        }
+    }
+    return num;
+}

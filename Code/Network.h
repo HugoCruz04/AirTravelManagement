@@ -25,6 +25,8 @@ public:
     void loadNetwork(const std::string aiportsFileName, const std::string flightsFileName);
     int getAirportsNum() const; //3.i
     int getFligthsNum() const;  //3.i
+    int getFligthsNumPerCity(const std::string& city) const;           //3.iii eu pelo menos interpretei q eram funçoes assim q pediam
+    int getFligthsNumPerAirline(const std::string& airlinecode) const; //3.iii
 };
 
 #endif //PROJETO_2_NETWORK_H

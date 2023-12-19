@@ -2,6 +2,7 @@
 #include "Airport.h"
 #include "Flight.h"
 #include <iostream>
+#include <algorithm>
 
 using namespace std;
 
@@ -25,8 +26,8 @@ void Network::readAiports(const std::string fileName) {
            std::getline(iss, country, ',') &&
            std::getline(iss,sLatitude,',') &&
            std::getline(iss,sLongitude)){
-        Airport airport= Airport(iata, name, city, country, stof(sLatitude), stof(sLongitude));
-        Airports.push_back(airport);
+            Airport airport= Airport(iata, name, city, country, stof(sLatitude), stof(sLongitude));
+            Airports.push_back(airport);
         }else{
             cerr << "Error parsing line: " << line << endl;
             continue;
@@ -94,7 +95,6 @@ Airport* Network::findAirport(std::string IATA) {
 
 std::vector<Airport> Network::getAirports() {return Airports;}
 
-
 std::vector<Airline> Network::getAirlines() {return Airlines;}
 
 void Network::readAirlines(const std::string fileName) {
@@ -122,7 +122,7 @@ void Network::readAirlines(const std::string fileName) {
             continue;
         }
     }
-  
+}
 int Network::getAirportsNum() {
     int num = Airports.size();
     return num;

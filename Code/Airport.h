@@ -16,7 +16,7 @@ private:
     float latitude;
     float longitude;
 
-    std::vector<const Flight> flights; //list of flights departing from an airport
+    std::vector<Flight> flights; //list of flights departing from an airport
 
 
 public:
@@ -27,9 +27,9 @@ public:
     std::string getCountry() const;
     float getLatitude() const;
     float getLongitude() const;
-    std::vector<const Flight*> getFlights() const;
+    std::vector<Flight> getFlights() const;
     int getFlightsNum() const;
-    void addFlight(const Flight* flight);
+    void addFlight(const Flight flight);
 
 };
 #endif //PROJETO_2_AIRPORT_H

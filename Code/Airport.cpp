@@ -1,3 +1,4 @@
+#include <set>
 #include "Airport.h"
 #include "Flight.h"
 
@@ -13,5 +14,18 @@ string Airport::getCity() const {return city;}
 string Airport::getCountry() const {return country;}
 float Airport::getLatitude() const {return latitude;}
 float Airport::getLongitude() const {return longitude;}
-vector<const Flight> Airport::getFlights() const {return flights;}
-void Airport::addFlight(const Flight flight){flights.push_back(flight);}
+
+std::vector<const Flight *> Airport::getFlights() const {return flights;}
+
+
+void  Airport::addFlight(const Flight* flight){flights.push_back(flight);}
+
+int Airport::getFlightsNum() const {
+    std::set<pair<string,string>> uniqueCombinations;
+    for (const Flight* flight : flights) {
+        pair<string, string> p = {flight->getSource(), flight->getTarget()};
+        uniqueCombinations.insert(p);
+    }
+    return uniqueCombinations.size();
+}
+

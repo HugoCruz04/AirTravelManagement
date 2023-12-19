@@ -94,6 +94,7 @@ Airport* Network::findAirport(std::string IATA) {
 
 std::vector<Airport> Network::getAirports() {return Airports;}
 
+
 std::vector<Airline> Network::getAirlines() {return Airlines;}
 
 void Network::readAirlines(const std::string fileName) {
@@ -121,4 +122,16 @@ void Network::readAirlines(const std::string fileName) {
             continue;
         }
     }
+  
+int Network::getAirportsNum() {
+    int num = Airports.size();
+    return num;
+}
+
+int Network::getFligthsNum() {
+    int num=0;
+    for(const Airport& air: Airports) {
+        num+=air.getFlightsNum();
+    }
+    return num;
 }

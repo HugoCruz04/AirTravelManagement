@@ -23,6 +23,8 @@ public:
     void readFlights(const std::string fileName);
     void readAirlines(const std::string fileName);
     void loadNetwork(const std::string aiportsFileName, const std::string flightsFileName);
+    int getAirportsNum();
+    int getFligthsNum();
 };
 
 #endif //PROJETO_2_NETWORK_H

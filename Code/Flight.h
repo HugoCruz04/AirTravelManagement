@@ -6,6 +6,8 @@
 
 using namespace std;
 
+class Airport;
+
 class Flight{
 private:
     string source;      //source airport's IATA
@@ -19,7 +21,6 @@ public:
     string getTarget() const;
     string getAirline() const;
     Airport* getDest() const;
-    Airport* setDest();
 };
 
 #endif //PROJETO_2_FLIGHT_H

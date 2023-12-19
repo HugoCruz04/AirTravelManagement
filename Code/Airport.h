@@ -1,10 +1,12 @@
 #include <string>
-#include "Flight.h"
+#include <vector>
 
 #ifndef PROJETO_2_AIRPORT_H
 #define PROJETO_2_AIRPORT_H
 
 using namespace std;
+
+class Flight;
 
 class Airport{
 private:
@@ -15,7 +17,7 @@ private:
     float latitude;
     float longitude;
 
-    vector<flight> flights; //list of flights departing from an airport
+    vector<const Flight*> flights; //list of flights departing from an airport
 
 
 public:

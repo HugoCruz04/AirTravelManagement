@@ -4,27 +4,27 @@
 #ifndef PROJETO_2_AIRPORT_H
 #define PROJETO_2_AIRPORT_H
 
-using namespace std;
 
 class Flight;
 
 class Airport{
 private:
-    string IATA;
-    string name;
-    string city;
-    string country;
+    std::string IATA;
+    std::string name;
+    std::string city;
+    std::string country;
     float latitude;
     float longitude;
 
-    vector<const Flight*> flights; //list of flights departing from an airport
+    std::vector<const Flight*> flights; //list of flights departing from an airport
 
 
 public:
-    string getIATA() const;
-    string getName() const;
-    string getCity() const;
-    string getCountry() const;
+    Airport(std::string IATA, std::string name, std::string city, std::string country, float latitude, float longitude);
+    std::string getIATA() const;
+    std::string getName() const;
+    std::string getCity() const;
+    std::string getCountry() const;
     float getLatitude() const;
     float getLongitude() const;
     void addFlight(const Flight* flight);

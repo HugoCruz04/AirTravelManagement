@@ -1,21 +1,25 @@
 #include <string>
+#include <vector>
+#include <fstream>
+#include <sstream>
+#include <iostream>
 #include "Airport.h"
 #include "Flight.h"
 
 #ifndef PROJETO_2_NETWORK_H
 #define PROJETO_2_NETWORK_H
 
-using namespace std;
 
 class Network{
 private:
-    vector<Airport>* Airports;
+    std::vector<Airport> Airports;
 
 public:
-    static Airport* findAirport(string IATA);
-    void readAiports(const string fileName);
-    void readFlights(const string fileName);
-    void loadNetwork(const string aiportsFileName, const string flightsFileName);
+    static Airport* findAirport(std::string IATA);
+    std::vector<Airport> getAirports();
+    void readAiports(const std::string fileName);
+    void readFlights(const std::string fileName);
+    void loadNetwork(const std::string aiportsFileName, const std::string flightsFileName);
 };
 
 #endif //PROJETO_2_NETWORK_H

@@ -4,22 +4,21 @@
 #ifndef PROJETO_2_FLIGHT_H
 #define PROJETO_2_FLIGHT_H
 
-using namespace std;
 
 class Airport;
 
 class Flight{
 private:
-    string source;      //source airport's IATA
-    string target;      //target airport's IATA
-    string airline;     //arline ICAO
+    std::string source;      //source airport's IATA
+    std::string target;      //target airport's IATA
+    std::string airline;     //arline ICAO
     Airport* dest;    //destination airport
 
 public:
-    Flight(string source, string target, string airline);
-    string getSource() const;
-    string getTarget() const;
-    string getAirline() const;
+    Flight(std::string source, std::string target, std::string airline);
+    std::string getSource() const;
+    std::string getTarget() const;
+    std::string getAirline() const;
     Airport* getDest() const;
 };
 

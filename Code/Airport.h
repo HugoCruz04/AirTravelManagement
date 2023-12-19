@@ -27,6 +27,8 @@ public:
     std::string getCountry() const;
     float getLatitude() const;
     float getLongitude() const;
+    std::vector<const Flight*> getFlights() const;
+    int getFlightsNum() const;
     void addFlight(const Flight* flight);
 };
 #endif //PROJETO_2_AIRPORT_H

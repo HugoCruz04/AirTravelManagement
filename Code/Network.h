@@ -20,6 +20,8 @@ public:
     void readAiports(const std::string fileName);
     void readFlights(const std::string fileName);
     void loadNetwork(const std::string aiportsFileName, const std::string flightsFileName);
+    int getAirportsNum();
+    int getFligthsNum();
 };
 
 #endif //PROJETO_2_NETWORK_H

@@ -36,3 +36,17 @@ void Network::readAiports(const std::string fileName) {
 
 
 std::vector<Airport> Network::getAirports() {return Airports;}
+
+
+int Network::getAirportsNum() {
+    int num = Airports.size();
+    return num;
+}
+
+int Network::getFligthsNum() {
+    int num=0;
+    for(const Airport& air: Airports) {
+        num+=air.getFlightsNum();
+    }
+    return num;
+}

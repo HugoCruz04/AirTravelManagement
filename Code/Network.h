@@ -16,7 +16,7 @@ private:
     std::vector<Airport> Airports;
     std::vector<Airline> Airlines;
 public:
-    static Airport* findAirport(std::string IATA);
+    Airport* findAirport(std::string IATA);
     std::vector<Airport> getAirports();
     std::vector<Airline> getAirlines();
     void readAiports(const std::string fileName);

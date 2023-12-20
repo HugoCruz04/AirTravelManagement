@@ -1,8 +1,11 @@
+#include <set>
+#include <unordered_set>
 #include <string>
 #include <vector>
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <algorithm>
 #include "Airport.h"
 #include "Flight.h"
 #include "Airline.h"
@@ -27,7 +30,8 @@ public:
     int getFligthsNum() const;  //3.i
     int getFligthsNumPerCity(const std::string& city) const;           //3.iii eu pelo menos interpretei q eram funçoes assim q pediam
     int getFligthsNumPerAirline(const std::string& airlinecode) const; //3.iii
-
+    int numberOfCountriesAnAirportFliesTo(const std::string& AirportIATA); //3.iv a)
+    int numberOfCountriesACityFliesTo(const std::string& City); //3.iv b)
     void getDestNumFrom(std::string IATA, int &airports, int &cities, int &countries);//3.v
 };
 

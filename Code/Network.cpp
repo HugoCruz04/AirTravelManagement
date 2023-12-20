@@ -1,8 +1,7 @@
 #include "Network.h"
 #include "Airport.h"
 #include "Flight.h"
-#include <iostream>
-#include <algorithm>
+
 #include <set>
 
 using namespace std;
@@ -76,7 +75,7 @@ void Network::readFlights(const std::string fileName) {
 }
 
 
-Airport* Network::findAirport(std::string IATA) {
+Airport* Network::findAirport(const std::string IATA) {
     int left = 0;
     int right = Airports.size() - 1;
 
@@ -137,7 +136,7 @@ int Network::getFligthsNum() const {
     return num;
 }
 
-int Network::getFligthsNumPerCity(const std::string& city) const {
+int Network::getFligthsNumPerCity(const string& city) const {
     int num=0;
     for(Airport airport:Airports) {
         if(airport.getCity()==city) {
@@ -147,7 +146,7 @@ int Network::getFligthsNumPerCity(const std::string& city) const {
     return num;
 }
 
-int Network::getFligthsNumPerAirline(const std::string& airlinecode) const {
+int Network::getFligthsNumPerAirline(const string& airlinecode) const {
     int num=0;
     for(Airport airport:Airports) {
         for(Flight flight: airport.getFlights()) {
@@ -157,6 +156,23 @@ int Network::getFligthsNumPerAirline(const std::string& airlinecode) const {
         }
     }
     return num;
+}
+
+int Network::numberOfCountriesAnAirportFliesTo(const string& AirportIATA) {
+    unordered_set<string> countries;
+    Airport* airport = Network::findAirport(AirportIATA);
+    for(auto f: airport->getFlights()) countries.insert(f.getDest()->getCountry());
+    return countries.size();
+}
+
+int Network::numberOfCountriesACityFliesTo(const string& City){
+    unordered_set<string> countries;
+    vector<Airport> airports;
+    for(auto a : Airports ) if(a.getCity()==City) airports.push_back(a);
+    for(auto airport : airports){
+        for(auto f: airport.getFlights()) countries.insert(f.getDest()->getCountry());
+    }
+    return countries.size();
 }
 
 void Network::getDestNumFrom(std::string IATA, int &airports, int &cities, int &countries) {

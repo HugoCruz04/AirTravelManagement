@@ -15,7 +15,7 @@ string Airport::getCountry() const {return country;}
 float Airport::getLatitude() const {return latitude;}
 float Airport::getLongitude() const {return longitude;}
 
-std::vector<Flight> Airport::getFlights() const {return flights;}
+const std::vector<Flight> &Airport::getFlights() const {return flights;}
 
 
 void  Airport::addFlight(Flight flight){flights.push_back(flight);}

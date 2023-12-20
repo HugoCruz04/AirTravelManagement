@@ -5,8 +5,8 @@
 
  using namespace std;
 
- Flight::Flight(std::string _source, std::string _target, std::string _airline):source(std::move(_source)),
-                target(std::move(_target)),airline(std::move(_airline)){}
+ Flight::Flight(std::string _source, std::string _target, std::string _airline, Airport* _dest):source(std::move(_source)),
+                target(std::move(_target)),airline(std::move(_airline)),dest(_dest){}
 
 string Flight::getSource() const {return source;}
 string Flight::getTarget() const {return target;}

@@ -15,11 +15,11 @@ private:
     Airport* dest;    //destination airport
 
 public:
-    Flight(std::string source, std::string target, std::string airline);
+    Flight(std::string source, std::string target, std::string airline, Airport* dest);
     std::string getSource() const;
     std::string getTarget() const;
     std::string getAirline() const;
-    Airport* getDest() const;
+    Airport *getDest() const;
 };
 
 #endif //PROJETO_2_FLIGHT_H

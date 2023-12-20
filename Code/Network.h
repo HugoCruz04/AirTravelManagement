@@ -27,6 +27,8 @@ public:
     int getFligthsNum() const;  //3.i
     int getFligthsNumPerCity(const std::string& city) const;           //3.iii eu pelo menos interpretei q eram funçoes assim q pediam
     int getFligthsNumPerAirline(const std::string& airlinecode) const; //3.iii
+
+    void getDestNumFrom(std::string IATA, int &airports, int &cities, int &countries);//3.v
 };
 
 #endif //PROJETO_2_NETWORK_H

@@ -3,6 +3,7 @@
 #include "Flight.h"
 #include <iostream>
 #include <algorithm>
+#include <set>
 
 using namespace std;
 
@@ -58,9 +59,9 @@ void Network::readFlights(const std::string fileName) {
             getline(iss, airline, ',')) {
 
             Airport* sourceAirport = findAirport(source);
-
+            Airport* dest = findAirport(target);
             if (sourceAirport) {
-                Flight flight(source, target, airline);
+                Flight flight(source, target, airline,dest);
                 sourceAirport->addFlight(flight);
             } else {
                 cerr << "Error: Source airport not found - " << source << endl;
@@ -156,4 +157,29 @@ int Network::getFligthsNumPerAirline(const std::string& airlinecode) const {
         }
     }
     return num;
+}
+
+void Network::getDestNumFrom(std::string IATA, int &airports, int &cities, int &countries) {
+    Airport* airport = findAirport(IATA);
+
+    if (airport== nullptr) {
+        // Handle the case where the airport is not found
+        airports = cities = countries = 0;
+        return;
+    }
+
+    std::set<std::string> airportsIATAs;
+    std::set<std::string> citiesNames;
+    std::set<std::string> countriesNames;
+    for (const Flight& flight: airport->getFlights()) {
+        Airport* w= flight.getDest();
+        airportsIATAs.insert(w->getIATA());
+
+        citiesNames.insert(w->getCity());
+        countriesNames.insert(w->getCountry());
+
+    }
+    airports=airportsIATAs.size();
+    cities=citiesNames.size();
+    countries=countriesNames.size();
 }

@@ -1,4 +1,5 @@
 #include "Network.h"
+#include <iostream>
 using namespace std;
 
 using namespace std;
@@ -22,4 +23,10 @@ int main(int argc, char* argv[]){
 
     cout<<"num flights in Aberdeen: "<<network.getFligthsNumPerCity("Aberdeen")<<endl;
     cout<<"num flights of TAP: "<<network.getFligthsNumPerAirline("TAP")<<endl;
+
+    int countries=0;
+    int cities=0;
+    int airports=0;
+    network.getDestNumFrom( "GKA",airports,cities,countries);
+    cout<<"\nairports: "<<airports<<"\ncities: "<<cities<<"\ncountrie: "<<countries<< endl;
 }

@@ -37,3 +37,11 @@ int Airport::getAirlinesNum() const {
     return uniqueCombinations.size();
 }
 
+bool Airport::isVisited() const {
+    return visited;
+}
+
+void Airport::setVisited(bool v) {
+    visited=v;
+}
+

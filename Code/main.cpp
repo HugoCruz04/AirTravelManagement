@@ -10,9 +10,9 @@ int main(int argc, char* argv[]){
     network.readFlights("dataset/flights.csv");
 
     for(auto a: network.getAirports()){
-        cout<<a.getIATA()<<"\nairport country: "<<a.getCountry()<<"\nairport city: "<<a.getCity()<<"\nflights num: "<<a.getFlightsNum()<<"\nairlines num: "<<a.getAirlinesNum()<<endl;
+        cout<<a->getIATA()<<"\nairport country: "<<a->getCountry()<<"\nairport city: "<<a->getCity()<<"\nflights num: "<<a->getFlightsNum()<<"\nairlines num: "<<a->getAirlinesNum()<<endl;
 
-        for(auto f: a.getFlights()){
+        for(auto f: a->getFlights()){
             cout<<f.getSource()<<" "<<f.getTarget()<<" "<<f.getAirline()<<endl;
         }
 
@@ -29,4 +29,5 @@ int main(int argc, char* argv[]){
     int airports=0;
     network.getDestNumFrom( "GKA",airports,cities,countries);
     cout<<"\nairports: "<<airports<<"\ncities: "<<cities<<"\ncountrie: "<<countries<< endl;
+    cout<<
 }

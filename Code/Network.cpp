@@ -7,7 +7,7 @@
 
 using namespace std;
 
-void Network::readAiports(const std::string fileName) {
+void Network::readAiports(std::string fileName) {
     ifstream  file(fileName);
 
     if(!file.is_open()){
@@ -27,15 +27,14 @@ void Network::readAiports(const std::string fileName) {
            std::getline(iss, country, ',') &&
            std::getline(iss,sLatitude,',') &&
            std::getline(iss,sLongitude)){
-            Airport airport= Airport(iata, name, city, country, stof(sLatitude), stof(sLongitude));
-            Airports.push_back(airport);
+            addAirport(iata, name, city, country, stof(sLatitude), stof(sLongitude));
         }else{
             cerr << "Error parsing line: " << line << endl;
             continue;
         }
     }
-    std::sort(Airports.begin(), Airports.end(), [](const Airport& a, const Airport& b) {
-        return a.getIATA() < b.getIATA();
+    std::sort(Airports.begin(), Airports.end(), [](Airport *a, Airport *b) {
+        return a->getIATA() < b->getIATA();
     });
     file.close();
 }
@@ -83,9 +82,9 @@ Airport* Network::findAirport(std::string IATA) {
     while (left <= right) {
         int mid = left + (right - left) / 2;
 
-        if (Airports[mid].getIATA() == IATA) {
-            return &Airports[mid]; // Found the airport, return a pointer to it
-        } else if (Airports[mid].getIATA() < IATA) {
+        if (Airports[mid]->getIATA() == IATA) {
+            return Airports[mid]; // Found the airport, return a pointer to it
+        } else if (Airports[mid]->getIATA() < IATA) {
             left = mid + 1;
         } else {
             right = mid - 1;
@@ -94,7 +93,7 @@ Airport* Network::findAirport(std::string IATA) {
     return nullptr;
 }
 
-std::vector<Airport> Network::getAirports() {return Airports;}
+std::vector<Airport*> Network::getAirports() {return Airports;}
 
 std::vector<Airline> Network::getAirlines() {return Airlines;}
 
@@ -131,17 +130,17 @@ int Network::getAirportsNum() const {
 
 int Network::getFligthsNum() const {
     int num=0;
-    for(const Airport& air: Airports) {
-        num+=air.getFlightsNum();
+    for(const Airport* air: Airports) {
+        num+=air->getFlightsNum();
     }
     return num;
 }
 
 int Network::getFligthsNumPerCity(const std::string& city) const {
     int num=0;
-    for(Airport airport:Airports) {
-        if(airport.getCity()==city) {
-            num+=airport.getFlightsNum();
+    for(Airport *airport:Airports) {
+        if(airport->getCity()==city) {
+            num+=airport->getFlightsNum();
         }
     }
     return num;
@@ -149,8 +148,8 @@ int Network::getFligthsNumPerCity(const std::string& city) const {
 
 int Network::getFligthsNumPerAirline(const std::string& airlinecode) const {
     int num=0;
-    for(Airport airport:Airports) {
-        for(Flight flight: airport.getFlights()) {
+    for(Airport* airport:Airports) {
+        for(Flight flight: airport->getFlights()) {
             if(flight.getAirline()==airlinecode) {
                 num++;
             }
@@ -183,3 +182,34 @@ void Network::getDestNumFrom(std::string IATA, int &airports, int &cities, int &
     cities=citiesNames.size();
     countries=countriesNames.size();
 }
+
+void nodesAtDistanceDFSVisit(const Network *g, Airport *v, int k, int &counter) {
+
+    if(k==0) {
+        counter++;
+        return ;
+    }
+    v->setVisited(true);
+
+    for(auto &e: v->getFlights()) {
+        auto w=e.getDest();
+        if(!w->isVisited()) nodesAtDistanceDFSVisit(g, w,k-1,counter);
+    }
+}
+
+int Network::getDestNumFromAtDist(std::string IATA, int distance) {
+    int counter=0;
+    for(Airport* airport : Airports) {
+        airport->setVisited(false);
+    }
+    auto airport = findAirport(IATA);
+    nodesAtDistanceDFSVisit(this, airport, distance, counter);
+    return counter;
+
+}
+
+void Network::addAirport(std::string IATA, std::string name, std::string city, std::string country, float latitude,float longitude) {
+    Airports.push_back(new Airport(IATA,name, city, country, latitude, longitude));
+}
+
+

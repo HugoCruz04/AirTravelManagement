@@ -13,13 +13,14 @@
 
 class Network{
 private:
-    std::vector<Airport> Airports;
+    std::vector<Airport*> Airports;
     std::vector<Airline> Airlines;
 public:
     Airport* findAirport(std::string IATA);
-    std::vector<Airport> getAirports();
+    std::vector<Airport*> getAirports();
     std::vector<Airline> getAirlines();
-    void readAiports(const std::string fileName);
+    void addAirport(std::string IATA, std::string name, std::string city, std::string country, float latitude, float longitude);
+    void readAiports(std::string fileName);
     void readFlights(const std::string fileName);
     void readAirlines(const std::string fileName);
     void loadNetwork(const std::string aiportsFileName, const std::string flightsFileName);
@@ -29,6 +30,7 @@ public:
     int getFligthsNumPerAirline(const std::string& airlinecode) const; //3.iii
 
     void getDestNumFrom(std::string IATA, int &airports, int &cities, int &countries);//3.v
+    int getDestNumFromAtDist(std::string IATA, int distance);
 };
 
 #endif //PROJETO_2_NETWORK_H

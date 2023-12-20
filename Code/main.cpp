@@ -35,6 +35,8 @@ int main(int argc, char* argv[]) {
     cout << "\nairports: " << airports << "\ncities: " << cities << "\ncountrie: " << countries << endl;
 
 
-    cout << network.numberOfCountriesACityFliesTo("New York");
+    cout << network.numberOfCountriesACityFliesTo("New York")<<endl;
+    network.getDestNumFromAtDist("GKA", 2, airports, cities, countries);
+    cout<<"airports: "<<airports<<"\ncities: "<<cities<<"\ncountries: "<<countries<<endl;
     return 0;
 }

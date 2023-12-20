@@ -199,33 +199,39 @@ void Network::getDestNumFrom(std::string IATA, int &airports, int &cities, int &
     countries=countriesNames.size();
 }
 
-void nodesAtDistanceDFSVisit(const Network *g, Airport *v, int k, int &counter) {
+void Network::addAirport(std::string IATA, std::string name, std::string city, std::string country, float latitude,float longitude) {
+    Airports.push_back(new Airport(IATA,name, city, country, latitude, longitude));
+}
+
+void nodesAtDistanceDFSVisit(const Network *g, Airport *v, int k, set<std::string> &airportsIATAs, set<std::string> &citiesNames, set<std::string> &countriesNames) {
 
     if(k==0) {
-        counter++;
+        airportsIATAs.insert(v->getIATA());
+        citiesNames.insert(v->getCity());
+        countriesNames.insert(v->getCountry());
         return ;
     }
     v->setVisited(true);
 
     for(auto &e: v->getFlights()) {
         auto w=e.getDest();
-        if(!w->isVisited()) nodesAtDistanceDFSVisit(g, w,k-1,counter);
+        if(!w->isVisited()) nodesAtDistanceDFSVisit(g, w,k-1,airportsIATAs, citiesNames, countriesNames);
     }
 }
 
-int Network::getDestNumFromAtDist(std::string IATA, int distance) {
-    int counter=0;
+int Network::getDestNumFromAtDist(std::string IATA, int distance,int &airports, int &cities, int &countries) {
+    std::set<std::string> airportsIATAs;
+    std::set<std::string> citiesNames;
+    std::set<std::string> countriesNames;
     for(Airport* airport : Airports) {
         airport->setVisited(false);
     }
     auto airport = findAirport(IATA);
-    nodesAtDistanceDFSVisit(this, airport, distance, counter);
-    return counter;
+    nodesAtDistanceDFSVisit(this, airport, distance, airportsIATAs, citiesNames, countriesNames);
+    airports=airportsIATAs.size();
+    cities=citiesNames.size();
+    countries=countriesNames.size();
 
-}
-
-void Network::addAirport(std::string IATA, std::string name, std::string city, std::string country, float latitude,float longitude) {
-    Airports.push_back(new Airport(IATA,name, city, country, latitude, longitude));
 }
 
 

@@ -34,7 +34,7 @@ public:
     int numberOfCountriesAnAirportFliesTo(const std::string& AirportIATA); //3.iv a)
     int numberOfCountriesACityFliesTo(const std::string& City); //3.iv b)
     void getDestNumFrom(std::string IATA, int &airports, int &cities, int &countries);//3.v
-    int getDestNumFromAtDist(std::string IATA, int distance);
+    int getDestNumFromAtDist(std::string IATA, int distance,int &airports, int &cities, int &countries); //3.vi
 };
 
 #endif //PROJETO_2_NETWORK_H

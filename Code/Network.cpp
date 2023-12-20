@@ -234,4 +234,20 @@ int Network::getDestNumFromAtDist(std::string IATA, int distance,int &airports, 
 
 }
 
+std::vector<Airport *> Network::findTopKAirports(int k) {
+    std::vector<Airport*> sortedAirports;
+
+// Using std::copy with std::back_inserter
+    std::copy(Airports.begin(), Airports.end(), std::back_inserter(sortedAirports));
+    std::sort(sortedAirports.begin(), sortedAirports.end(), [sortedAirports](const auto& a, const auto& b) {
+        return a->getFlightsNum() > b->getFlightsNum();
+    });
+    std::vector<Airport *> res;
+    for (int i = 0; i < k && i < sortedAirports.size(); i++) {
+        res.push_back(sortedAirports[i]);
+    }
+
+    return res;
+}
+
 

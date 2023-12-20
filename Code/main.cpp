@@ -38,5 +38,9 @@ int main(int argc, char* argv[]) {
     cout << network.numberOfCountriesACityFliesTo("New York")<<endl;
     network.getDestNumFromAtDist("GKA", 2, airports, cities, countries);
     cout<<"airports: "<<airports<<"\ncities: "<<cities<<"\ncountries: "<<countries<<endl;
+
+    for(auto n:network.findTopKAirports(3)) {
+        cout<<n->getIATA()<<endl;
+    }
     return 0;
 }

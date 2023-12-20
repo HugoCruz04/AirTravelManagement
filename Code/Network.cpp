@@ -2,7 +2,9 @@
 #include "Airport.h"
 #include "Flight.h"
 
+#include <unordered_set>
 #include <set>
+#include <stack>
 
 using namespace std;
 
@@ -245,6 +247,47 @@ std::vector<Airport *> Network::findTopKAirports(int k) {
     std::vector<Airport *> res;
     for (int i = 0; i < k && i < sortedAirports.size(); i++) {
         res.push_back(sortedAirports[i]);
+    }
+
+    return res;
+}
+
+void dfs_art(Network *g, Airport *v, stack<std::string> &s, unordered_set<Airport*> &l, int &i){
+    v->setNum(i);
+    v->setLow(i);
+    i++;
+    int children = 0;
+    s.push(v->getIATA());
+    for (Flight flight : v->getFlights()) {
+        if (flight.getDest()->getNum() == 0) {
+            children++;
+            dfs_art(g, flight.getDest(), s, l, i);
+            v->setLow(min(v->getLow(), flight.getDest()->getLow()));
+            if (v->getIATA() != g->getAirports()[0]->getIATA() && flight.getDest()->getLow() >= v->getNum())
+                l.insert(v);
+        }
+        else if (flight.getDest()->getNum() > 0)
+            v->setLow(min(v->getLow(), flight.getDest()->getNum()));
+    }
+    s.pop();
+    if (v->getIATA() == g->getAirports()[0]->getIATA() && children > 1) {
+        l.insert(v);
+    }
+}
+
+std::unordered_set<Airport *> Network::articulationAirports() {
+    unordered_set<Airport*> res;
+    stack<std::string> s;
+    int i = 0;
+    for (Airport* airport : Airports) {
+        airport->setNum(i);
+    }
+
+    i++;
+    for (Airport* airport : Airports) {
+        if (airport->getNum() == 0) {
+            dfs_art(this, airport, s, res, i);
+        }
     }
 
     return res;

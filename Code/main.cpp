@@ -40,7 +40,11 @@ int main(int argc, char* argv[]) {
     cout<<"airports: "<<airports<<"\ncities: "<<cities<<"\ncountries: "<<countries<<endl;
 
     for(auto n:network.findTopKAirports(3)) {
-        cout<<n->getIATA()<<endl;
+        cout<<n->getFlightsNum()<<endl;
+    }
+    unordered_set<Airport*> s=network.articulationAirports();
+    for(auto a:s) {
+        cout<<a->getIATA()<<endl;
     }
     return 0;
 }

@@ -18,6 +18,9 @@ private:
 
     bool visited;          // auxiliary field
 
+    int num;               // auxiliary field
+    int low;               // auxiliary field
+
     std::vector<Flight> flights; //list of flights departing from an airport
 
 
@@ -35,5 +38,10 @@ public:
     int getFlightsNum() const;  //3.ii(tambem é usada na 3.i)
     int getAirlinesNum() const; //3.ii
     void addFlight(const Flight flight);
+
+    int getNum() const;
+    void setNum(int num);
+    int getLow() const;
+    void setLow(int low);
 };
 #endif //PROJETO_2_AIRPORT_H

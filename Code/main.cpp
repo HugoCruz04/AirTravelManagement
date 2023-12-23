@@ -5,8 +5,9 @@ using namespace std;
 int main(int argc, char* argv[]) {
     Network network;
     network.readAiports("dataset/airports.csv");
-    network.readAirlines("dataset/airlines.csv");
+    //network.readAirlines("dataset/airlines.csv");
     network.readFlights("dataset/flights.csv");
+    /*
     Airport *airport = network.findAirport("GKA");
     cout << network.numberOfCountriesAnAirportFliesTo("LJA") << endl;
     cout << network.numberOfCountriesAnAirportFliesTo("JFK") << endl;
@@ -46,7 +47,7 @@ int main(int argc, char* argv[]) {
     cout<<"\n"<<s.size()<<endl;
     for(auto a:s) {
         cout<<a->getIATA()<<endl;
-    }
+    }*/
     cout<<"\n";
     for(auto t:network.findDiameter()) {
         cout<<t.first<<" "<<t.second<<endl;

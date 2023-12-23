@@ -293,34 +293,35 @@ std::unordered_set<Airport *> Network::articulationAirports() {
     return res;
 }
 
-int Network::shortestPath(std::string start, std::string end) {
-    Airport *airport = findAirport(start);
-    Airport *endAirp = findAirport(end);
-    if (airport== nullptr || endAirp == nullptr) {
+int Network::shortestPath( std::string start,  std::string end) {
+    Airport* airport = findAirport(start);
+    Airport* endAirp = findAirport(end);
+    if (airport == nullptr || endAirp == nullptr) {
         return -1; // Invalid input
     }
-    for (Airport *airport1: Airports) {
-        airport1->setVisited(false);
-    }
 
-    queue<Airport *> q;
+    std::unordered_set<Airport*> visited;
+    std::queue<Airport*> q;
     int distance = 0;
 
     q.push(airport);
-    airport->setVisited(true);
+    visited.insert(airport);
 
     while (!q.empty()) {
-        int size=q.size();
-        for(int i=0; i<size; i++) {
+        int size = q.size();
+        for (int i = 0; i < size; i++) {
             Airport* w = q.front();
             q.pop();
-            if(w == endAirp) {
+            if (w == endAirp) {
                 return distance;
             }
 
-            for(Flight flight : w->getFlights()) {
-                q.push(flight.getDest());
-                flight.getDest()->setVisited(true);
+            for (Flight flight : w->getFlights()) {
+                Airport* dest = flight.getDest();
+                if (visited.find(dest) == visited.end()) {
+                    q.push(dest);
+                    visited.insert(dest);
+                }
             }
         }
         distance++;

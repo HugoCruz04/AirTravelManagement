@@ -328,18 +328,9 @@ int Network::shortestPath(std::string start, std::string end) {
     return -1;
 }
 
-struct PairHash {
-    template <class T1, class T2>
-    std::size_t operator () (const std::pair<T1, T2>& p) const {
-        auto h1 = std::hash<T1>{}(p.first);
-        auto h2 = std::hash<T2>{}(p.second);
 
-        // A simple hash combination function
-        return h1 ^ h2;
-    }
-};
 
-unordered_set<pair<string,string>> Network::findDiameter() {
+unordered_set<pair<std::string, std::string>, PairHash> Network::findDiameter() {
     int max=0;
     unordered_set<pair<string,string>, PairHash> res;
     for(Airport* airport:Airports) {

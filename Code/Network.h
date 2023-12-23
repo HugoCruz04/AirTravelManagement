@@ -14,6 +14,17 @@
 #define PROJETO_2_NETWORK_H
 
 
+struct PairHash {
+    template <class T1, class T2>
+    std::size_t operator () (const std::pair<T1, T2>& p) const {
+        auto h1 = std::hash<T1>{}(p.first);
+        auto h2 = std::hash<T2>{}(p.second);
+
+        // A simple hash combination function
+        return h1 ^ h2;
+    }
+};
+
 class Network{
 private:
     std::vector<Airport*> Airports;
@@ -37,7 +48,7 @@ public:
     void getDestNumFromAtDist(std::string IATA, int distance,int &airports, int &cities, int &countries); //3.vi
 
     int shortestPath(std::string start, std::string end);
-    std::unordered_set<std::pair<std::string,std::string>> findDiameter();
+    std::unordered_set<std::pair< std::string, std::string>, PairHash> findDiameter();
 
     std::vector<Airport*> findTopKAirports(int k); //3.viii
     std::unordered_set<Airport*> articulationAirports();

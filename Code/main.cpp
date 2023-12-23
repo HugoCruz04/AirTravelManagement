@@ -47,6 +47,9 @@ int main(int argc, char* argv[]) {
     for(auto a:s) {
         cout<<a->getIATA()<<endl;
     }
-    cout<<"\n"<<network.shortestPath("LIS","NRT");
+    cout<<"\n";
+    for(auto t:network.findDiameter()) {
+        cout<<t.first<<" "<<t.second<<endl;
+    }
     return 0;
 }

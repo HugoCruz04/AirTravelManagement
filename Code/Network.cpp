@@ -3,7 +3,7 @@
 #include "Flight.h"
 
 #include <unordered_set>
-#include <set>
+
 #include <stack>
 
 using namespace std;
@@ -185,9 +185,9 @@ void Network::getDestNumFrom(std::string IATA, int &airports, int &cities, int &
         return;
     }
 
-    std::set<std::string> airportsIATAs;
-    std::set<std::string> citiesNames;
-    std::set<std::string> countriesNames;
+    std::unordered_set<std::string> airportsIATAs;
+    std::unordered_set<std::string> citiesNames;
+    std::unordered_set<std::string> countriesNames;
     for (const Flight& flight: airport->getFlights()) {
         Airport* w= flight.getDest();
         airportsIATAs.insert(w->getIATA());
@@ -221,7 +221,7 @@ void nodesAtDistanceDFSVisit(const Network *g, Airport *v, int k, set<std::strin
     }
 }
 
-int Network::getDestNumFromAtDist(std::string IATA, int distance,int &airports, int &cities, int &countries) {
+void Network::getDestNumFromAtDist(std::string IATA, int distance,int &airports, int &cities, int &countries) {
     std::set<std::string> airportsIATAs;
     std::set<std::string> citiesNames;
     std::set<std::string> countriesNames;

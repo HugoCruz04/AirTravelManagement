@@ -1,3 +1,5 @@
+
+#include <unordered_set>
 #include <set>
 #include "Airport.h"
 #include "Flight.h"
@@ -20,8 +22,19 @@ const std::vector<Flight> &Airport::getFlights() const {return flights;}
 
 void  Airport::addFlight(Flight flight){flights.push_back(flight);}
 
+struct PairHash {
+    template <class T1, class T2>
+    std::size_t operator () (const std::pair<T1, T2>& p) const {
+        auto h1 = std::hash<T1>{}(p.first);
+        auto h2 = std::hash<T2>{}(p.second);
+
+        // A simple hash combination function
+        return h1 ^ h2;
+    }
+};
+
 int Airport::getFlightsNum() const {
-    std::set<pair<string,string>> uniqueCombinations;
+    std::unordered_set<pair<string,string>,PairHash> uniqueCombinations;
     for (Flight flight : flights) {
         pair<string, string> p = {flight.getSource(), flight.getTarget()};
         uniqueCombinations.insert(p);
@@ -30,7 +43,7 @@ int Airport::getFlightsNum() const {
 }
 
 int Airport::getAirlinesNum() const {
-    std::set<string> uniqueCombinations;
+    std::unordered_set<string> uniqueCombinations;
     for (Flight flight : flights) {
         uniqueCombinations.insert(flight.getAirline());
     }

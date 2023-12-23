@@ -43,8 +43,10 @@ int main(int argc, char* argv[]) {
         cout<<n->getFlightsNum()<<endl;
     }
     unordered_set<Airport*> s=network.articulationAirports();
+    cout<<"\n"<<s.size()<<endl;
     for(auto a:s) {
         cout<<a->getIATA()<<endl;
     }
+    cout<<"\n"<<network.shortestPath("LIS","NRT");
     return 0;
 }

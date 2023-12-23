@@ -35,8 +35,13 @@ public:
     int numberOfCountriesACityFliesTo(const std::string& City); //3.iv b)
     void getDestNumFrom(std::string IATA, int &airports, int &cities, int &countries);//3.v
     void getDestNumFromAtDist(std::string IATA, int distance,int &airports, int &cities, int &countries); //3.vi
+
+    int shortestPath(std::string start, std::string end);
+    std::unordered_set<std::pair<std::string,std::string>> findDiameter();
+
     std::vector<Airport*> findTopKAirports(int k); //3.viii
     std::unordered_set<Airport*> articulationAirports();
+
 };
 
 #endif //PROJETO_2_NETWORK_H

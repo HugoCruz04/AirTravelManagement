@@ -3,7 +3,7 @@
 #include "Flight.h"
 
 #include <unordered_set>
-
+#include <queue>
 #include <stack>
 
 using namespace std;
@@ -293,4 +293,66 @@ std::unordered_set<Airport *> Network::articulationAirports() {
     return res;
 }
 
+int Network::shortestPath(std::string start, std::string end) {
+    Airport *airport = findAirport(start);
+    Airport *endAirp = findAirport(end);
+    if (airport== nullptr || endAirp == nullptr) {
+        return -1; // Invalid input
+    }
+    for (Airport *airport1: Airports) {
+        airport1->setVisited(false);
+    }
 
+    queue<Airport *> q;
+    int distance = 0;
+
+    q.push(airport);
+    airport->setVisited(true);
+
+    while (!q.empty()) {
+        int size=q.size();
+        for(int i=0; i<size; i++) {
+            Airport* w = q.front();
+            q.pop();
+            if(w == endAirp) {
+                return distance;
+            }
+
+            for(Flight flight : w->getFlights()) {
+                q.push(flight.getDest());
+                flight.getDest()->setVisited(true);
+            }
+        }
+        distance++;
+    }
+    return -1;
+}
+
+struct PairHash {
+    template <class T1, class T2>
+    std::size_t operator () (const std::pair<T1, T2>& p) const {
+        auto h1 = std::hash<T1>{}(p.first);
+        auto h2 = std::hash<T2>{}(p.second);
+
+        // A simple hash combination function
+        return h1 ^ h2;
+    }
+};
+
+unordered_set<pair<string,string>> Network::findDiameter() {
+    int max=0;
+    unordered_set<pair<string,string>, PairHash> res;
+    for(Airport* airport:Airports) {
+        for(Airport* airport2:Airports) {
+            int candidate = shortestPath(airport->getIATA(),airport2->getIATA());
+            if(candidate>max) {
+                max=candidate;
+                res.clear();
+            }
+            if(candidate==max) {
+                res.insert({airport->getIATA(),airport2->getIATA()});
+            }
+        }
+    }
+    return res;
+}

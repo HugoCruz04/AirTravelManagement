@@ -94,6 +94,15 @@ Airport* Network::findAirport(const std::string IATA) {
     return nullptr;
 }
 
+Airport* Network::findAirportByName(std::string AirportName) {
+    for (Airport* airport:Airports) {
+        if(airport->getName() == AirportName) {
+            return airport;
+        }
+    }
+    return nullptr;
+}
+
 std::vector<Airport*> Network::getAirports() {return Airports;}
 
 std::vector<Airline> Network::getAirlines() {return Airlines;}
@@ -329,8 +338,6 @@ int Network::shortestPath( std::string start,  std::string end) {
     return -1;
 }
 
-
-
 unordered_set<pair<std::string, std::string>, PairHash> Network::findDiameter() {
     int max=0;
     unordered_set<pair<string,string>, PairHash> res;
@@ -347,4 +354,85 @@ unordered_set<pair<std::string, std::string>, PairHash> Network::findDiameter() 
         }
     }
     return res;
+}
+
+std::vector<std::vector<Airport*>> Network::shortestPathsIATA(const std::string& startIATA, const std::string& endIATA) {
+    Airport* airport = findAirport(startIATA);
+    Airport* endAirp = findAirport(endIATA);
+    if (airport == nullptr || endAirp == nullptr) {
+        return {}; // Invalid input, return an empty vector
+    }
+
+    std::vector<std::vector<Airport*>> paths; // Vector to store the paths
+    std::queue<std::vector<Airport*>> q; // Queue of paths
+    std::unordered_set<Airport*> visited;
+
+    q.push({airport}); // Start with a path containing only the starting airport
+    visited.insert(airport);
+
+    while (!q.empty()) {
+        int size = q.size();
+        for (int i = 0; i < size; i++) {
+            std::vector<Airport*> currentPath = q.front();
+            Airport* w = currentPath.back();
+            q.pop();
+
+            if (w == endAirp) {
+                paths.push_back(currentPath); // Found a path to the destination
+            }
+
+            for (Flight flight : w->getFlights()) {
+                Airport* dest = flight.getDest();
+                if (visited.find(dest) == visited.end()) {
+                    std::vector<Airport*> newPath = currentPath;
+                    newPath.push_back(dest);
+                    q.push(newPath);
+                    visited.insert(dest);
+                }
+            }
+        }
+    }
+
+    return paths;
+}
+
+std::vector<std::vector<Airport *>>
+Network::shortestPathsName(const string &airportNameStart, const string &airportNameEnd) {
+    Airport* airport = findAirportByName(airportNameStart);
+    Airport* endAirp = findAirportByName(airportNameEnd);
+    if (airport == nullptr || endAirp == nullptr) {
+        return {}; // Invalid input, return an empty vector
+    }
+
+    std::vector<std::vector<Airport*>> paths; // Vector to store the paths
+    std::queue<std::vector<Airport*>> q; // Queue of paths
+    std::unordered_set<Airport*> visited;
+
+    q.push({airport}); // Start with a path containing only the starting airport
+    visited.insert(airport);
+
+    while (!q.empty()) {
+        int size = q.size();
+        for (int i = 0; i < size; i++) {
+            std::vector<Airport*> currentPath = q.front();
+            Airport* w = currentPath.back();
+            q.pop();
+
+            if (w == endAirp) {
+                paths.push_back(currentPath); // Found a path to the destination
+            }
+
+            for (Flight flight : w->getFlights()) {
+                Airport* dest = flight.getDest();
+                if (visited.find(dest) == visited.end()) {
+                    std::vector<Airport*> newPath = currentPath;
+                    newPath.push_back(dest);
+                    q.push(newPath);
+                    visited.insert(dest);
+                }
+            }
+        }
+    }
+
+    return paths;
 }

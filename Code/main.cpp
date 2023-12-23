@@ -5,9 +5,8 @@ using namespace std;
 int main(int argc, char* argv[]) {
     Network network;
     network.readAiports("dataset/airports.csv");
-    //network.readAirlines("dataset/airlines.csv");
-    network.readFlights("dataset/flights.csv");
-    /*
+    network.readAirlines("dataset/airlines.csv");
+    network.readFlights("dataset/flights.csv");/*
     Airport *airport = network.findAirport("GKA");
     cout << network.numberOfCountriesAnAirportFliesTo("LJA") << endl;
     cout << network.numberOfCountriesAnAirportFliesTo("JFK") << endl;
@@ -44,13 +43,24 @@ int main(int argc, char* argv[]) {
         cout<<n->getFlightsNum()<<endl;
     }
     unordered_set<Airport*> s=network.articulationAirports();
-    cout<<"\n"<<s.size()<<endl;
     for(auto a:s) {
         cout<<a->getIATA()<<endl;
-    }*/
-    cout<<"\n";
-    for(auto t:network.findDiameter()) {
-        cout<<t.first<<" "<<t.second<<endl;
     }
+
+    for(auto a:network.findDiameter()) {
+        cout<<a.first<<" "<<a.second<<endl;
+    }*/
+    for(auto a: network.shortestPathsIATA("LIS", "MAD")) {
+        for(auto aa:a) {
+            cout<<aa->getIATA()<<endl;
+        }
+    }
+    cout<<endl;
+    for(auto a: network.shortestPathsName("Lisboa", "Barajas")) {
+        for(auto aa:a) {
+            cout<<aa->getIATA()<<endl;
+        }
+    }
+
     return 0;
 }

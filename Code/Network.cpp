@@ -436,3 +436,40 @@ Network::shortestPathsName(const string &airportNameStart, const string &airport
 
     return paths;
 }
+/*
+std::vector<std::string> Network::findBestFlightOption(const std::string source, const std::string destination) {
+    // Check if the source and destination are airports, cities, or coordinates
+    if (isAirportCode(source) && isAirportCode(destination)) {
+        // Case i: Airport code or name
+        return network.findBestFlightsByAirports(source, destination);
+    } else if (isCityName(source) && isCityName(destination)) {
+        // Case ii: City name
+        return network.findBestFlightsByCities(source, destination);
+    } else if (isCoordinates(source) && isCoordinates(destination)) {
+        // Case iii: Geographical coordinates
+        return network.findBestFlightsByCoordinates(parseCoordinates(source), parseCoordinates(destination));
+    } else {
+        // Handle other cases or provide an error message
+        std::cerr << "Invalid input criteria.\n";
+        return {}; // Return an empty vector or another appropriate value
+    }
+}*/
+
+bool Network::isAirportCode(std::string code) {
+    bool ans=true;
+    if(code.length()==3) {
+        for(char c:code) {
+            ans=ans && isupper(c);
+        }
+        return ans;
+    }
+    return false;
+}
+
+bool Network::isCoordinates(const std::string coordinate) {
+    bool ans = true;
+    for (const char c : coordinate) {
+        ans = ans && (isdigit(c) || c == '-' || c == '.');
+    }
+    return ans;
+}

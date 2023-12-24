@@ -58,8 +58,9 @@ public:
     std::vector<std::vector<Airport*>> shortestPathsIATA(const std::string& startIATA, const std::string& endIATA);//4.i airportsIATA
     std::vector<std::vector<Airport*>> shortestPathsName(const std::string& airportNameStart, const std::string& airportNameEnd);//4.i airportsName
 
-
-
+    std::vector<std::string> findBestFlightOption(const std::string source, const std::string destination);
+    bool isAirportCode(std::string code);
+    bool isCoordinates(const std::string coord);
 };
 
 #endif //PROJETO_2_NETWORK_H

@@ -49,7 +49,7 @@ int main(int argc, char* argv[]) {
 
     for(auto a:network.findDiameter()) {
         cout<<a.first<<" "<<a.second<<endl;
-    }*/
+    }
     for(auto a: network.shortestPathsIATA("LIS", "MAD")) {
         for(auto aa:a) {
             cout<<aa->getIATA()<<endl;
@@ -60,7 +60,8 @@ int main(int argc, char* argv[]) {
         for(auto aa:a) {
             cout<<aa->getIATA()<<endl;
         }
-    }
+    }*/
+    cout<<network.isCoordinates(".0");
 
     return 0;
 }

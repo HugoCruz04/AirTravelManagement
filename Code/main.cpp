@@ -61,7 +61,14 @@ int main(int argc, char* argv[]) {
             cout<<aa->getIATA()<<endl;
         }
     }*/
-    cout<<network.isCoordinates(".0");
+
+    for(Airport* air: network.getAirports()) {
+        for(Airport* airp: network.getAirports()) {
+            if(air->getCity()==airp->getCity() && air!=airp && airp->getCountry()!=air->getCountry()) {
+                cout<<air->getCity()<<air->getCountry() <<airp->getCountry()<<endl;
+            }
+        }
+    }
 
     return 0;
 }

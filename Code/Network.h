@@ -58,9 +58,12 @@ public:
     std::vector<std::vector<Airport*>> shortestPathsIATA(const std::string& startIATA, const std::string& endIATA);//4.i airportsIATA
     std::vector<std::vector<Airport*>> shortestPathsName(const std::string& airportNameStart, const std::string& airportNameEnd);//4.i airportsName
 
-    std::vector<std::string> findBestFlightOption(const std::string source, const std::string destination);
-    bool isAirportCode(std::string code);
-    bool isCoordinates(const std::string coord);
+    std::vector<Airport*> findAirportsInCity(const std::string CityName, const std::string countryName);
+    std::vector<std::vector<Airport*>> shortestPathsCityNames(const std::string CityNameStart, const std::string countrystart, const std::string CityNameEnd, const std::string countryEnd);//4.ii city names
+
+    std::vector<Airport*> findClosestAirports(float latitude, float longitude);
+    std::vector<std::vector<Airport*>> shortestPathsCoordinates(float latitudeStart, float longitudeStart, float latitudeEnd, float longitudeEnd);//4.iii
+
 };
 
 #endif //PROJETO_2_NETWORK_H

@@ -5,6 +5,8 @@
 #include <unordered_set>
 #include <queue>
 #include <stack>
+#include <cmath>
+#include <limits>
 
 using namespace std;
 
@@ -396,8 +398,7 @@ std::vector<std::vector<Airport*>> Network::shortestPathsIATA(const std::string&
     return paths;
 }
 
-std::vector<std::vector<Airport *>>
-Network::shortestPathsName(const string &airportNameStart, const string &airportNameEnd) {
+std::vector<std::vector<Airport *>>Network::shortestPathsName(const string &airportNameStart, const string &airportNameEnd) {
     Airport* airport = findAirportByName(airportNameStart);
     Airport* endAirp = findAirportByName(airportNameEnd);
     if (airport == nullptr || endAirp == nullptr) {
@@ -436,34 +437,124 @@ Network::shortestPathsName(const string &airportNameStart, const string &airport
 
     return paths;
 }
+
+vector<Airport*> Network::findAirportsInCity(const string CityName, const std::string countryName) {
+    vector<Airport*> res;
+    for(Airport* airport: Airports) {
+        if (airport->getCity() == CityName && airport->getCountry()==countryName){
+            res.push_back(airport);
+        }
+    }
+    return res;
+}
+
+std::vector<std::vector<Airport*>> Network::shortestPathsCityNames(const std::string CityNameStart, const std::string countrystart, const std::string CityNameEnd, const std::string countryEnd) {
+    std::vector<Airport*> airportsStart = findAirportsInCity(CityNameStart, countrystart);
+    std::vector<Airport*> airportsEnd = findAirportsInCity(CityNameEnd, countryEnd);
+
+    std::vector<std::vector<Airport*>> res;
+
+    for (Airport* startAirport : airportsStart) {
+        for (Airport* endAirport : airportsEnd) {
+            std::vector<std::vector<Airport*>> temp = shortestPathsIATA(startAirport->getIATA(), endAirport->getIATA());
+
+            if (temp.empty()) {
+                continue;  // Skip empty paths
+            }
+
+            if (res.empty() || temp[0].size() < res[0].size()) {
+                res = temp;  // Replace existing value in res
+            } else if (temp[0].size() == res[0].size()) {
+                // If sizes are equal, append paths from temp to res
+                res.insert(res.end(), temp.begin(), temp.end());
+            }
+        }
+    }
+
+    return res;
+}
+
+std::vector<Airport*> Network::findClosestAirports(float latitudedeg, float longitudedeg) {
+    float latitude = latitudedeg * M_PI /180;
+    float longitude = longitudedeg * M_PI /180;
+    float min = std::numeric_limits<float>::max();
+    vector<Airport*> res;
+    for(Airport* airport: Airports) {
+        float airlat = airport->getLatitude() * M_PI /180;
+        float airlong = airport->getLongitude() * M_PI /180;
+        float candidate = 2*6367.5165* asin(sqrt(sin((latitude-airlat)/2)*sin((latitude-airlat)/2)+cos(airlat)*cos(latitude)*sin((longitude-airlong)/2)*sin((longitude-airlong)/2)));
+        if(min>candidate || res.empty()) {
+            min=candidate;
+            res.clear();
+        }
+        if(min==candidate) {
+            res.push_back(airport);
+        }
+    }
+    return res;
+}
+
+std::vector<std::vector<Airport *>> Network::shortestPathsCoordinates(float latitudeStart, float longitudeStart, float latitudeEnd, float longitudeEnd) {
+    std::vector<Airport*> airportsStart = findClosestAirports(latitudeStart, longitudeStart);
+    std::vector<Airport*> airportsEnd = findClosestAirports(latitudeEnd, longitudeEnd);
+
+
+    std::vector<std::vector<Airport*>> res;
+
+    for (Airport* startAirport : airportsStart) {
+        for (Airport* endAirport : airportsEnd) {
+            std::vector<std::vector<Airport*>> temp = shortestPathsIATA(startAirport->getIATA(), endAirport->getIATA());
+
+            if (temp.empty()) {
+                continue;  // Skip empty paths
+            }
+
+            if (res.empty() || temp[0].size() < res[0].size()) {
+                res = temp;  // Replace existing value in res
+            } else if (temp[0].size() == res[0].size()) {
+                // If sizes are equal, append paths from temp to res
+                res.insert(res.end(), temp.begin(), temp.end());
+            }
+        }
+    }
+
+    return res;
+}
+
+
+
+
 /*
-std::vector<std::string> Network::findBestFlightOption(const std::string source, const std::string destination) {
-    // Check if the source and destination are airports, cities, or coordinates
+std::vector<vector<Airport*>> Network::findBestFlightOption(const std::string source, const std::string destination) {
+    vector<vector<Airport*>> res;
     if (isAirportCode(source) && isAirportCode(destination)) {
-        // Case i: Airport code or name
-        return network.findBestFlightsByAirports(source, destination);
+        return shortestPathsIATA(source, destination);
+
+    } else if (isCoordinates(source) && isCoordinates(destination)) {
+        // Case iii: Geographical coordinates
+        //return network.findBestFlightsByCoordinates(parseCoordinates(source), parseCoordinates(destination));
     } else if (isCityName(source) && isCityName(destination)) {
         // Case ii: City name
         return network.findBestFlightsByCities(source, destination);
-    } else if (isCoordinates(source) && isCoordinates(destination)) {
-        // Case iii: Geographical coordinates
-        return network.findBestFlightsByCoordinates(parseCoordinates(source), parseCoordinates(destination));
     } else {
         // Handle other cases or provide an error message
         std::cerr << "Invalid input criteria.\n";
         return {}; // Return an empty vector or another appropriate value
     }
-}*/
+}
 
 bool Network::isAirportCode(std::string code) {
-    bool ans=true;
-    if(code.length()==3) {
-        for(char c:code) {
-            ans=ans && isupper(c);
-        }
-        return ans;
+    if (code.length() != 3) {
+        return false;
     }
-    return false;
+
+    for (char c : code) {
+        if (!std::isupper(c)) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 bool Network::isCoordinates(const std::string coordinate) {
@@ -473,3 +564,22 @@ bool Network::isCoordinates(const std::string coordinate) {
     }
     return ans;
 }
+
+bool Network::isCityName(const std::string name) {
+    for (char c : name) {
+        bool isValidCharacter =isalpha(c)
+                || isdigit(c)
+                || c == '\''
+                || c == '-'
+                || c == ' '
+                || c == '.'
+                || c == '/'
+                || c == '('
+                || c == ')';
+
+        if (!isValidCharacter) {
+            return false;
+        }
+    }
+    return true;
+}*/

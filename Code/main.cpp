@@ -62,11 +62,10 @@ int main(int argc, char* argv[]) {
         }
     }*/
 
-    for(Airport* air: network.getAirports()) {
-        for(Airport* airp: network.getAirports()) {
-            if(air->getCity()==airp->getCity() && air!=airp && airp->getCountry()!=air->getCountry()) {
-                cout<<air->getCity()<<air->getCountry() <<airp->getCountry()<<endl;
-            }
+    for(auto v: network.shortestPathsIATAtoName("LIS","Barajas")) {
+        cout<<1<<endl;
+        for(auto a: v) {
+            cout<<a->getName()<<endl;
         }
     }
 

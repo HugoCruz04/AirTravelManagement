@@ -64,6 +64,8 @@ public:
     std::vector<Airport*> findClosestAirports(float latitude, float longitude);
     std::vector<std::vector<Airport*>> shortestPathsCoordinates(float latitudeStart, float longitudeStart, float latitudeEnd, float longitudeEnd);//4.iii
 
+    std::vector<std::vector<Airport*>> shortestPathsIATAtoName(const std::string& startIATA, const std::string& airportNameEnd);
+
 };
 
 #endif //PROJETO_2_NETWORK_H

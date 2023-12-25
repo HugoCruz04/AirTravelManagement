@@ -521,6 +521,48 @@ std::vector<std::vector<Airport *>> Network::shortestPathsCoordinates(float lati
     return res;
 }
 
+std::vector<std::vector<Airport *>>
+Network::shortestPathsIATAtoName(const string &startIATA, const string &airportNameEnd) {
+    Airport* airport = findAirport(startIATA);
+    Airport* endAirp = findAirportByName(airportNameEnd);
+    if (airport == nullptr || endAirp == nullptr) {
+        return {}; // Invalid input, return an empty vector
+    }
+
+    std::vector<std::vector<Airport*>> paths; // Vector to store the paths
+    std::queue<std::vector<Airport*>> q; // Queue of paths
+    std::unordered_set<Airport*> visited;
+
+    q.push({airport}); // Start with a path containing only the starting airport
+    visited.insert(airport);
+
+    while (!q.empty()) {
+        int size = q.size();
+        for (int i = 0; i < size; i++) {
+            std::vector<Airport*> currentPath = q.front();
+            Airport* w = currentPath.back();
+            q.pop();
+
+            if (w == endAirp) {
+                paths.push_back(currentPath); // Found a path to the destination
+            }
+
+            for (Flight flight : w->getFlights()) {
+                Airport* dest = flight.getDest();
+                if (visited.find(dest) == visited.end()) {
+                    std::vector<Airport*> newPath = currentPath;
+                    newPath.push_back(dest);
+                    q.push(newPath);
+                    visited.insert(dest);
+                }
+            }
+        }
+    }
+
+    return paths;
+
+}
+
 
 
 

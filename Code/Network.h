@@ -65,6 +65,7 @@ public:
     std::vector<std::vector<Airport*>> shortestPathsCoordinates(float latitudeStart, float longitudeStart, float latitudeEnd, float longitudeEnd);//4.iii
 
     std::vector<std::vector<Airport*>> shortestPathsIATAtoName(const std::string& startIATA, const std::string& airportNameEnd);
+    std::vector<std::vector<Airport*>> shortestPathsNametoIATA(const std::string& airportNameStart, const std::string& endIATA);
 
 };
 

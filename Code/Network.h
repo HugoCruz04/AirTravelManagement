@@ -44,8 +44,8 @@ public:
     int getFligthsNumPerAirline(const std::string& airlinecode) const; //3.iii
     int numberOfCountriesAnAirportFliesTo(const std::string& AirportIATA); //3.iv a)
     int numberOfCountriesACityFliesTo(const std::string& City, const std::string& Country); //3.iv b)
-    void getDestNumFrom(std::string IATA, int &airports, int &cities, int &countries);//3.v bem??
-    void getDestNumFromAtDist(std::string IATA, int distance,int &airports, int &cities, int &countries); //3.vi
+    void getDestNumFrom(std::string IATA, int &airports, int &cities, int &countries);//3.v raciocionio esta bem??
+    void getDestNumFromAtDist(std::string IATA, int distance,int &airports, int &cities, int &countries); //3.vi ???
 
     int shortestPathNR(std::string start, std::string end);
     std::unordered_set<std::pair< std::string, std::string>, PairHash> findDiameter();//3.vii //saber se pede mesmo o diametro, acho q n

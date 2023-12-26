@@ -215,7 +215,7 @@ void Network::addAirport(std::string IATA, std::string name, std::string city, s
     Airports.push_back(new Airport(IATA,name, city, country, latitude, longitude));
 }
 
-void nodesAtDistanceDFSVisit(const Network *g, Airport *v, int k, set<std::string> &airportsIATAs, set<std::string> &citiesNames, set<std::string> &countriesNames) {
+/*void nodesAtDistanceDFSVisit(const Network *g, Airport *v, int k, set<std::string> &airportsIATAs, set<std::string> &citiesNames, set<std::string> &countriesNames) {
 
     if(k==0) {
         airportsIATAs.insert(v->getIATA());
@@ -229,17 +229,47 @@ void nodesAtDistanceDFSVisit(const Network *g, Airport *v, int k, set<std::strin
         auto w=e.getDest();
         if(!w->isVisited()) nodesAtDistanceDFSVisit(g, w,k-1,airportsIATAs, citiesNames, countriesNames);
     }
-}
+}*/
 
 void Network::getDestNumFromAtDist(std::string IATA, int distance,int &airports, int &cities, int &countries) {
     std::set<std::string> airportsIATAs;
-    std::set<std::string> citiesNames;
+    std::set<pair<string,string >> citiesNames;
     std::set<std::string> countriesNames;
     for(Airport* airport : Airports) {
         airport->setVisited(false);
     }
     auto airport = findAirport(IATA);
-    nodesAtDistanceDFSVisit(this, airport, distance, airportsIATAs, citiesNames, countriesNames);
+    int size;
+    int nivel=0;
+    queue<Airport*> q;
+    q.push(airport);
+    airport->setVisited(true);
+
+    while(!q.empty() && nivel<=distance) {
+        size=q.size();
+
+        for (int i=0;i<size;i++) {
+            auto v = q.front();
+            q.pop();
+
+
+            airportsIATAs.insert(v->getIATA());
+            citiesNames.insert({v->getCity(), v->getCountry()});
+            countriesNames.insert(v->getCountry());
+
+
+            for(auto &nn : v->getFlights()) {
+                auto w=nn.getDest();
+                if(!w->isVisited()) {
+                    q.push(nn.getDest());
+                    w->setVisited(true);
+
+                }
+            }
+        }
+        nivel++;
+    }
+
     airports=airportsIATAs.size();
     cities=citiesNames.size();
     countries=countriesNames.size();

@@ -61,13 +61,9 @@ int main(int argc, char* argv[]) {
             cout<<aa->getIATA()<<endl;
         }
     }*/
-
-    for(auto v: network.shortestPathsNametoIATA("Lisboa","MAD")) {
-        cout<<1<<endl;
-        for(auto a: v) {
-            cout<<a->getName()<<endl;
-        }
-    }
+    int airp, cit, count;
+    network.getDestNumFromAtDist("CDG", 0,airp, cit, count);
+    cout<<airp<<' '<<cit<<' '<<count;
 
     return 0;
 }

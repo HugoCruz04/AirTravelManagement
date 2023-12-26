@@ -145,7 +145,7 @@ int Network::getAirportsNum() const {
 int Network::getFligthsNum() const {
     int num=0;
     for(const Airport* air: Airports) {
-        num+=air->getFlightsNum();
+        num+=air->getFlights().size();
     }
     return num;
 }
@@ -154,7 +154,7 @@ int Network::getFligthsNumPerCity(const string& city, const string& Country) con
     int num=0;
     for(Airport *airport:Airports) {
         if(airport->getCity()==city && airport->getCountry()==Country) {
-            num+=airport->getFlightsNum();
+            num+=airport->getFlights().size();
         }
     }
     return num;

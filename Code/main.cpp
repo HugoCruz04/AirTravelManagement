@@ -6,68 +6,28 @@ int main(int argc, char* argv[]) {
     Network network;
     network.readAiports("dataset/airports.csv");
     network.readAirlines("dataset/airlines.csv");
-    network.readFlights("dataset/flights.csv");/*
-    Airport *airport = network.findAirport("GKA");
-    cout << network.numberOfCountriesAnAirportFliesTo("LJA") << endl;
-    cout << network.numberOfCountriesAnAirportFliesTo("JFK") << endl;
+    network.readFlights("dataset/flights.csv");
 
-    for (auto a: network.getAirports()) {
-        cout << a->getIATA() << "\nairport country: " << a->getCountry() << "\nairport city: " << a->getCity()
-             << "\nflights num: " << a->getFlightsNum() << "\nairlines num: " << a->getAirlinesNum() << endl;
+    cout<<network.getFligthsNum()<<endl;        //3.i
+    cout<<network.getAirportsNum()<<endl;
 
-        for (auto f: a->getFlights()) {
-            cout << f.getSource() << " " << f.getTarget() << " " << f.getAirline() << endl;
-        }
-    }
+    Airport* airport= network.findAirport("LIS");       //3.ii
+    cout<<airport->getAirlinesNum()<<" flightsnum:" << airport->getFlights().size()<<endl;
 
-    cout << endl;
+    cout<<network.getFligthsNumPerCity("Lisbon","Portugal")<<" "<<network.getFligthsNumPerAirline("TAP")<<endl; //3.iii
 
-    cout << "nr of airports: " << network.getAirportsNum() << endl;
-    cout << "nr of flights: " << network.getFligthsNum() << endl;
+    cout<<network.numberOfCountriesACityFliesTo("Lisbon","Portugal")<<' '<<network.numberOfCountriesAnAirportFliesTo("GKA")<<endl; //3.iv
 
-    cout << "num flights in Aberdeen: " << network.getFligthsNumPerCity("Aberdeen") << endl;
-    cout << "num flights of TAP: " << network.getFligthsNumPerAirline("TAP") << endl;
+    int cities, airports, countries;                                        //3.v
+    network.getDestNumFrom("CDG",airports,cities,countries);
+    cout<<airports<<' '<<cities<<' '<<countries<<endl;
 
-    int countries = 0;
-    int cities = 0;
-    int airports = 0;
-    network.getDestNumFrom("GKA", airports, cities, countries);
-    cout << "\nairports: " << airports << "\ncities: " << cities << "\ncountrie: " << countries << endl;
+    network.getDestNumFromAtDist("CDG", 3, airports,cities,countries); //3.vi
+    cout<<airports<<' '<<cities<<' '<<countries<<endl;
 
 
-    cout << network.numberOfCountriesACityFliesTo("New York")<<endl;
-    network.getDestNumFromAtDist("GKA", 2, airports, cities, countries);
-    cout<<"airports: "<<airports<<"\ncities: "<<cities<<"\ncountries: "<<countries<<endl;
 
-    for(auto n:network.findTopKAirports(3)) {
-        cout<<n->getFlightsNum()<<endl;
-    }
-    unordered_set<Airport*> s=network.articulationAirports();
-    for(auto a:s) {
-        cout<<a->getIATA()<<endl;
-    }
 
-    for(auto a:network.findDiameter()) {
-        cout<<a.first<<" "<<a.second<<endl;
-    }
-    for(auto a: network.shortestPathsIATA("LIS", "MAD")) {
-        for(auto aa:a) {
-            cout<<aa->getIATA()<<endl;
-        }
-    }
-    cout<<endl;
-    for(auto a: network.shortestPathsName("Lisboa", "Barajas")) {
-        for(auto aa:a) {
-            cout<<aa->getIATA()<<endl;
-        }
-    }
-    int airp, cit, count;
-    network.getDestNumFromAtDist("CDG", 0,airp, cit, count);
-    cout<<airp<<' '<<cit<<' '<<count;*/
-    vector<Airport*> n = network.findTopKAirports(10);
-    for(auto x: n) {
-        cout<<x->getName()<<' '<<x->getTrafic()<<endl;
-    }
 
 
 

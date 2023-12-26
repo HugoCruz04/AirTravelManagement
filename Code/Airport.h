@@ -39,7 +39,7 @@ public:
     bool isProcessing() const;
     void setProcessing(bool v);
     const std::vector<Flight> &getFlights() const;
-    int getFlightsNum() const;  //3.ii(tambem é usada na 3.i)
+   // int getFlightsNum() const;  //3.ii(tambem é usada na 3.i)
     int getAirlinesNum() const; //3.ii
     void addFlight(const Flight flight);
     void increaseIndegree();

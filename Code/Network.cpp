@@ -389,13 +389,13 @@ unordered_set<pair<std::string, std::string>, PairHash> Network::findDiameter() 
     return res;
 }
 
-void Network::maxstopsbetweenairportsAuxiliary(int & stops, vector<pair<Airport*, Airport*>> &airports) {
+void Network::getMaxStopsBetweenAirports(int & stops, std::vector<std::pair<Airport *, Airport *>> &airports) {
     int stopsNum = 0;
     vector<pair<Airport*, Airport*>> maxTripAirports;
 
     for (Airport* sourceAirport : Airports) {
         vector<pair<Airport*, Airport*>> aux;
-        int stops = calculateStopsBFS(sourceAirport, aux);
+        int stops = calculateStopsBFSAux(sourceAirport, aux);
         if (stops > stopsNum) {
             stopsNum = stops;
             maxTripAirports = aux;
@@ -410,7 +410,7 @@ void Network::maxstopsbetweenairportsAuxiliary(int & stops, vector<pair<Airport*
 
 }
 
-int Network::calculateStopsBFS(Airport* source, vector<pair<Airport*, Airport*>> &aux) {
+int Network::calculateStopsBFSAux(Airport* source, std::vector<std::pair<Airport *, Airport *>> &aux) {
     int distmax = 0;
     for(Airport* airport:Airports){
         airport->setVisited(false);

@@ -52,8 +52,8 @@ public:
     int shortestPathNR(std::string start, std::string end);
     std::unordered_set<std::pair< std::string, std::string>, PairHash> findDiameter();//extra... n é pedido
 
-    void maxstopsbetweenairportsAuxiliary(int & stops, std::vector <std::pair<Airport *, Airport *>> &airports);//3.vii
-    int calculateStopsBFS(Airport* source, std::vector<std::pair<Airport*, Airport*>> &aux);
+    void getMaxStopsBetweenAirports(int & stops, std::vector <std::pair<Airport *, Airport *>> &airports);//3.vii
+    int calculateStopsBFSAux(Airport* source, std::vector<std::pair<Airport*, Airport*>> &aux);
 
     std::vector<Airport*> findTopKAirports(int k); //3.viii
     std::unordered_set<Airport*> articulationAirports();//3.ix

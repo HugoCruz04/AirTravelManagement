@@ -148,10 +148,10 @@ int Network::getFligthsNum() const {
     return num;
 }
 
-int Network::getFligthsNumPerCity(const string& city) const {
+int Network::getFligthsNumPerCity(const string& city, const string& Country) const {
     int num=0;
     for(Airport *airport:Airports) {
-        if(airport->getCity()==city) {
+        if(airport->getCity()==city && airport->getCountry()==Country) {
             num+=airport->getFlightsNum();
         }
     }
@@ -177,10 +177,9 @@ int Network::numberOfCountriesAnAirportFliesTo(const string& AirportIATA) {
     return countries.size();
 }
 
-int Network::numberOfCountriesACityFliesTo(const string& City){
+int Network::numberOfCountriesACityFliesTo(const string& City, const string& Country){
     unordered_set<string> countries;
-    vector<Airport*> airports;
-    for(auto a : Airports ) if(a->getCity()==City) airports.push_back(a);
+    vector<Airport*> airports = findAirportsInCity(City, Country);
     for(auto airport : airports){
         for(auto f: airport->getFlights()) countries.insert(f.getDest()->getCountry());
     }

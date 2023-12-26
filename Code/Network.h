@@ -40,15 +40,15 @@ public:
     void loadNetwork(const std::string aiportsFileName, const std::string flightsFileName);
     int getAirportsNum() const; //3.i
     int getFligthsNum() const;  //3.i
-    int getFligthsNumPerCity(const std::string& city) const;           //3.iii eu pelo menos interpretei q eram funçoes assim q pediam
+    int getFligthsNumPerCity(const std::string& city, const std::string& Country) const;           //3.iii
     int getFligthsNumPerAirline(const std::string& airlinecode) const; //3.iii
     int numberOfCountriesAnAirportFliesTo(const std::string& AirportIATA); //3.iv a)
-    int numberOfCountriesACityFliesTo(const std::string& City); //3.iv b)
-    void getDestNumFrom(std::string IATA, int &airports, int &cities, int &countries);//3.v
+    int numberOfCountriesACityFliesTo(const std::string& City, const std::string& Country); //3.iv b)
+    void getDestNumFrom(std::string IATA, int &airports, int &cities, int &countries);//3.v bem??
     void getDestNumFromAtDist(std::string IATA, int distance,int &airports, int &cities, int &countries); //3.vi
 
     int shortestPathNR(std::string start, std::string end);
-    std::unordered_set<std::pair< std::string, std::string>, PairHash> findDiameter();//3.vii //saber se pede mesmo o diametro
+    std::unordered_set<std::pair< std::string, std::string>, PairHash> findDiameter();//3.vii //saber se pede mesmo o diametro, acho q n
 
     std::vector<Airport*> findTopKAirports(int k); //3.viii
     std::unordered_set<Airport*> articulationAirports();//3.ix

@@ -6,6 +6,7 @@
 #include <sstream>
 #include <iostream>
 #include <algorithm>
+#include <list>
 #include "Airport.h"
 #include "Flight.h"
 #include "Airline.h"
@@ -49,6 +50,8 @@ public:
 
     int shortestPathNR(std::string start, std::string end);
     std::unordered_set<std::pair< std::string, std::string>, PairHash> findDiameter();//3.vii //saber se pede mesmo o diametro, acho q n
+    void listmaxstopsbetweenairports(int & stops, std::vector<std::pair<Airport*, Airport*>> &airports);
+    int calculateStopsBFS(Airport* source, std::vector<std::pair<Airport*, Airport*>> &aux);
 
     std::vector<Airport*> findTopKAirports(int k); //3.viii
     std::unordered_set<Airport*> articulationAirports();//3.ix

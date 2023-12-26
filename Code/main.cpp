@@ -60,10 +60,18 @@ int main(int argc, char* argv[]) {
         for(auto aa:a) {
             cout<<aa->getIATA()<<endl;
         }
-    }*/
+    }
     int airp, cit, count;
     network.getDestNumFromAtDist("CDG", 0,airp, cit, count);
-    cout<<airp<<' '<<cit<<' '<<count;
+    cout<<airp<<' '<<cit<<' '<<count;*/
+    int stops;
+    vector<pair<Airport*, Airport*>> airports;
+    network.listmaxstopsbetweenairports(stops, airports);
+    cout<<stops<<endl;
+    for (auto s: airports) {
+        cout<<s.first->getIATA()<<' '<<s.second->getIATA()<<endl;
+    }
+
 
     return 0;
 }

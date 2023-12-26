@@ -17,6 +17,7 @@ private:
     float longitude;
 
     bool visited;          // auxiliary field
+    bool processing;          // auxiliary field
 
     int num;               // auxiliary field
     int low;               // auxiliary field
@@ -34,6 +35,8 @@ public:
     float getLongitude() const;
     bool isVisited() const;
     void setVisited(bool v);
+    bool isProcessing() const;
+    void setProcessing(bool v);
     const std::vector<Flight> &getFlights() const;
     int getFlightsNum() const;  //3.ii(tambem é usada na 3.i)
     int getAirlinesNum() const; //3.ii

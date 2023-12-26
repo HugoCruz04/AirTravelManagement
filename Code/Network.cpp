@@ -7,6 +7,7 @@
 #include <stack>
 #include <cmath>
 #include <limits>
+#include <list>
 
 using namespace std;
 
@@ -385,6 +386,62 @@ unordered_set<pair<std::string, std::string>, PairHash> Network::findDiameter() 
         }
     }
     return res;
+}
+
+void Network::listmaxstopsbetweenairports(int & stops, vector<pair<Airport*, Airport*>> &airports) {
+    int maxStops = 0;
+    vector<pair<Airport*, Airport*>> maxTripAirports;
+
+    for (auto sourceVertex : Airports) {
+        vector<pair<Airport*, Airport*>> aux;
+        int stops = calculateStopsBFS(sourceVertex, aux);
+        if (stops > maxStops) {
+            maxStops = stops;
+            maxTripAirports = aux;
+        } else if (stops == maxStops) {
+            maxTripAirports.insert(maxTripAirports.end(),aux.begin(),aux.end());
+
+        }
+    }
+
+    stops = maxStops;
+    airports = maxTripAirports;
+
+}
+
+int Network::calculateStopsBFS(Airport* source, vector<pair<Airport*, Airport*>> &aux) {
+    int maxdistance = 0;
+    for(auto *vertex:Airports){
+        vertex->setVisited(false);
+        vertex->setProcessing(false);
+    }
+    std::queue<std::pair<Airport*, int>> q;
+    q.push({source, 0});
+    source->setProcessing(true);
+
+    while (!q.empty()) {
+        auto current = q.front().first;
+        if(q.front().second>maxdistance){
+            maxdistance=q.front().second;
+            vector<pair<Airport*, Airport*>> ve;
+            ve.push_back({source,current});
+            aux = ve;
+        }else if(q.front().second==maxdistance){
+            aux.push_back({source,current});
+        }
+
+        for (const Flight& edge : current->getFlights()) {
+            if(edge.getDest()->isVisited()) continue;
+            if(edge.getDest()->isProcessing()) continue;
+            q.push({edge.getDest(),q.front().second+1});
+            edge.getDest()->setProcessing(true);
+        }
+        q.pop();
+        current->setVisited(true);
+        current->setProcessing(false);
+    }
+
+    return maxdistance;
 }
 
 std::vector<std::vector<Airport*>> Network::shortestPathsIATA(const std::string& startIATA, const std::string& endIATA) {

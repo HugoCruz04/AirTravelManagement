@@ -74,3 +74,11 @@ void Airport::setLow(int low) {
     Airport::low = low;
 }
 
+bool Airport::isProcessing() const {
+    return processing;
+}
+
+void Airport::setProcessing(bool v) {
+    processing=v;
+}
+

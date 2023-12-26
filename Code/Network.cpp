@@ -304,7 +304,7 @@ std::unordered_set<Airport *> Network::articulationAirports() {
     return res;
 }
 
-int Network::shortestPath( std::string start,  std::string end) {
+int Network::shortestPathNR(std::string start, std::string end) {
     Airport* airport = findAirport(start);
     Airport* endAirp = findAirport(end);
     if (airport == nullptr || endAirp == nullptr) {
@@ -345,7 +345,7 @@ unordered_set<pair<std::string, std::string>, PairHash> Network::findDiameter() 
     unordered_set<pair<string,string>, PairHash> res;
     for(Airport* airport:Airports) {
         for(Airport* airport2:Airports) {
-            int candidate = shortestPath(airport->getIATA(),airport2->getIATA());
+            int candidate = shortestPathNR(airport->getIATA(), airport2->getIATA());
             if(candidate>max) {
                 max=candidate;
                 res.clear();
@@ -399,43 +399,10 @@ std::vector<std::vector<Airport*>> Network::shortestPathsIATA(const std::string&
 }
 
 std::vector<std::vector<Airport *>>Network::shortestPathsName(const string &airportNameStart, const string &airportNameEnd) {
-    Airport* airport = findAirportByName(airportNameStart);
-    Airport* endAirp = findAirportByName(airportNameEnd);
-    if (airport == nullptr || endAirp == nullptr) {
-        return {}; // Invalid input, return an empty vector
-    }
+    vector<Airport*> airportsStart={findAirportByName(airportNameStart)};
+    vector<Airport*> airportsEnd={findAirportByName(airportNameEnd)};
 
-    std::vector<std::vector<Airport*>> paths; // Vector to store the paths
-    std::queue<std::vector<Airport*>> q; // Queue of paths
-    std::unordered_set<Airport*> visited;
-
-    q.push({airport}); // Start with a path containing only the starting airport
-    visited.insert(airport);
-
-    while (!q.empty()) {
-        int size = q.size();
-        for (int i = 0; i < size; i++) {
-            std::vector<Airport*> currentPath = q.front();
-            Airport* w = currentPath.back();
-            q.pop();
-
-            if (w == endAirp) {
-                paths.push_back(currentPath); // Found a path to the destination
-            }
-
-            for (Flight flight : w->getFlights()) {
-                Airport* dest = flight.getDest();
-                if (visited.find(dest) == visited.end()) {
-                    std::vector<Airport*> newPath = currentPath;
-                    newPath.push_back(dest);
-                    q.push(newPath);
-                    visited.insert(dest);
-                }
-            }
-        }
-    }
-
-    return paths;
+    return shortestPathsAuxiliary(airportsStart, airportsEnd);
 }
 
 vector<Airport*> Network::findAirportsInCity(const string CityName, const std::string countryName) {
@@ -448,30 +415,12 @@ vector<Airport*> Network::findAirportsInCity(const string CityName, const std::s
     return res;
 }
 
-std::vector<std::vector<Airport*>> Network::shortestPathsCityNames(const std::string CityNameStart, const std::string countrystart, const std::string CityNameEnd, const std::string countryEnd) {
+std::vector<std::vector<Airport*>> Network::shortestPathsCitys(std::string CityNameStart, std::string countrystart, std::string CityNameEnd, std::string countryEnd) {
     std::vector<Airport*> airportsStart = findAirportsInCity(CityNameStart, countrystart);
     std::vector<Airport*> airportsEnd = findAirportsInCity(CityNameEnd, countryEnd);
 
-    std::vector<std::vector<Airport*>> res;
 
-    for (Airport* startAirport : airportsStart) {
-        for (Airport* endAirport : airportsEnd) {
-            std::vector<std::vector<Airport*>> temp = shortestPathsIATA(startAirport->getIATA(), endAirport->getIATA());
-
-            if (temp.empty()) {
-                continue;  // Skip empty paths
-            }
-
-            if (res.empty() || temp[0].size() < res[0].size()) {
-                res = temp;  // Replace existing value in res
-            } else if (temp[0].size() == res[0].size()) {
-                // If sizes are equal, append paths from temp to res
-                res.insert(res.end(), temp.begin(), temp.end());
-            }
-        }
-    }
-
-    return res;
+    return shortestPathsAuxiliary(airportsStart, airportsEnd);
 }
 
 std::vector<Airport*> Network::findClosestAirports(float latitudedeg, float longitudedeg) {
@@ -493,12 +442,7 @@ std::vector<Airport*> Network::findClosestAirports(float latitudedeg, float long
     }
     return res;
 }
-
-std::vector<std::vector<Airport *>> Network::shortestPathsCoordinates(float latitudeStart, float longitudeStart, float latitudeEnd, float longitudeEnd) {
-    std::vector<Airport*> airportsStart = findClosestAirports(latitudeStart, longitudeStart);
-    std::vector<Airport*> airportsEnd = findClosestAirports(latitudeEnd, longitudeEnd);
-
-
+std::vector<std::vector<Airport *>> Network::shortestPathsAuxiliary(std::vector<Airport*> airportsStart, std::vector<Airport*> airportsEnd) {
     std::vector<std::vector<Airport*>> res;
 
     for (Airport* startAirport : airportsStart) {
@@ -520,46 +464,19 @@ std::vector<std::vector<Airport *>> Network::shortestPathsCoordinates(float lati
 
     return res;
 }
+std::vector<std::vector<Airport *>> Network::shortestPathsCoordinates(float latitudeStart, float longitudeStart, float latitudeEnd, float longitudeEnd) {
+    std::vector<Airport*> airportsStart = findClosestAirports(latitudeStart, longitudeStart);
+    std::vector<Airport*> airportsEnd = findClosestAirports(latitudeEnd, longitudeEnd);
+
+    return shortestPathsAuxiliary(airportsStart, airportsEnd);
+}
 
 std::vector<std::vector<Airport *>>
 Network::shortestPathsIATAtoName(const string &startIATA, const string &airportNameEnd) {
-    Airport* airport = findAirport(startIATA);
-    Airport* endAirp = findAirportByName(airportNameEnd);
-    if (airport == nullptr || endAirp == nullptr) {
-        return {}; // Invalid input, return an empty vector
-    }
+    vector<Airport*> airportsStart={findAirport(startIATA)};
+    vector<Airport*> airportsEnd={findAirportByName(airportNameEnd)};
 
-    std::vector<std::vector<Airport*>> paths; // Vector to store the paths
-    std::queue<std::vector<Airport*>> q; // Queue of paths
-    std::unordered_set<Airport*> visited;
-
-    q.push({airport}); // Start with a path containing only the starting airport
-    visited.insert(airport);
-
-    while (!q.empty()) {
-        int size = q.size();
-        for (int i = 0; i < size; i++) {
-            std::vector<Airport*> currentPath = q.front();
-            Airport* w = currentPath.back();
-            q.pop();
-
-            if (w == endAirp) {
-                paths.push_back(currentPath); // Found a path to the destination
-            }
-
-            for (Flight flight : w->getFlights()) {
-                Airport* dest = flight.getDest();
-                if (visited.find(dest) == visited.end()) {
-                    std::vector<Airport*> newPath = currentPath;
-                    newPath.push_back(dest);
-                    q.push(newPath);
-                    visited.insert(dest);
-                }
-            }
-        }
-    }
-
-    return paths;
+    return shortestPathsAuxiliary(airportsStart, airportsEnd);
 }
 
 std::vector<std::vector<Airport *>>
@@ -569,99 +486,88 @@ Network::shortestPathsNametoIATA(const string &airportNameStart, const string &e
     if (airport == nullptr || endAirp == nullptr) {
         return {}; // Invalid input, return an empty vector
     }
-
-    std::vector<std::vector<Airport*>> paths; // Vector to store the paths
-    std::queue<std::vector<Airport*>> q; // Queue of paths
-    std::unordered_set<Airport*> visited;
-
-    q.push({airport}); // Start with a path containing only the starting airport
-    visited.insert(airport);
-
-    while (!q.empty()) {
-        int size = q.size();
-        for (int i = 0; i < size; i++) {
-            std::vector<Airport*> currentPath = q.front();
-            Airport* w = currentPath.back();
-            q.pop();
-
-            if (w == endAirp) {
-                paths.push_back(currentPath); // Found a path to the destination
-            }
-
-            for (Flight flight : w->getFlights()) {
-                Airport* dest = flight.getDest();
-                if (visited.find(dest) == visited.end()) {
-                    std::vector<Airport*> newPath = currentPath;
-                    newPath.push_back(dest);
-                    q.push(newPath);
-                    visited.insert(dest);
-                }
-            }
-        }
-    }
-
-    return paths;
+    vector<Airport*> airportsStart={airport};
+    vector<Airport*> airportsEnd={endAirp};
+    return shortestPathsAuxiliary(airportsStart, airportsEnd);
 }
 
+std::vector<std::vector<Airport *>>
+Network::shortestPathsIATAtoCity(const string &startIATA, const string &cityNameEnd, const std::string& countryEnd) {
+    vector<Airport*> airportsStart = {findAirport(startIATA)};
+    vector<Airport*> airportsEnd = findAirportsInCity(cityNameEnd, countryEnd);
 
-
-
-/*
-std::vector<vector<Airport*>> Network::findBestFlightOption(const std::string source, const std::string destination) {
-    vector<vector<Airport*>> res;
-    if (isAirportCode(source) && isAirportCode(destination)) {
-        return shortestPathsIATA(source, destination);
-
-    } else if (isCoordinates(source) && isCoordinates(destination)) {
-        // Case iii: Geographical coordinates
-        //return network.findBestFlightsByCoordinates(parseCoordinates(source), parseCoordinates(destination));
-    } else if (isCityName(source) && isCityName(destination)) {
-        // Case ii: City name
-        return network.findBestFlightsByCities(source, destination);
-    } else {
-        // Handle other cases or provide an error message
-        std::cerr << "Invalid input criteria.\n";
-        return {}; // Return an empty vector or another appropriate value
-    }
+    return shortestPathsAuxiliary(airportsStart, airportsEnd);
 }
 
-bool Network::isAirportCode(std::string code) {
-    if (code.length() != 3) {
-        return false;
-    }
+std::vector<std::vector<Airport *>>
+Network::shortestPathsIATAtoCoord(const string &startIATA, float latitudeEnd, float longitudeEnd) {
+    vector<Airport*> airportsStart = {findAirport(startIATA)};
+    vector<Airport*> airportsEnd = findClosestAirports(latitudeEnd,longitudeEnd);
 
-    for (char c : code) {
-        if (!std::isupper(c)) {
-            return false;
-        }
-    }
-
-    return true;
+    return shortestPathsAuxiliary(airportsStart, airportsEnd);
 }
 
-bool Network::isCoordinates(const std::string coordinate) {
-    bool ans = true;
-    for (const char c : coordinate) {
-        ans = ans && (isdigit(c) || c == '-' || c == '.');
-    }
-    return ans;
+std::vector<std::vector<Airport *>>
+Network::shortestPathsNametoCity(const string &airportNameStart, const std::string CityNameEnd, const std::string countryEnd) {
+    vector<Airport*> airportsStart = {findAirportByName(airportNameStart)};
+    vector<Airport*> airportsEnd = findAirportsInCity(CityNameEnd, countryEnd);
+
+    return shortestPathsAuxiliary(airportsStart, airportsEnd);
 }
 
-bool Network::isCityName(const std::string name) {
-    for (char c : name) {
-        bool isValidCharacter =isalpha(c)
-                || isdigit(c)
-                || c == '\''
-                || c == '-'
-                || c == ' '
-                || c == '.'
-                || c == '/'
-                || c == '('
-                || c == ')';
+std::vector<std::vector<Airport *>>
+Network::shortestPathsNametoCoord(const string &airportNameStart, float latitudeEnd, float longitudeEnd) {
+    vector<Airport*> airportsStart = {findAirportByName(airportNameStart)};
+    vector<Airport*> airportsEnd = findClosestAirports(latitudeEnd,longitudeEnd);
 
-        if (!isValidCharacter) {
-            return false;
-        }
-    }
-    return true;
-}*/
+    return shortestPathsAuxiliary(airportsStart, airportsEnd);
+}
+
+std::vector<std::vector<Airport *>>
+Network::shortestPathsCityToIATA(std::string CityNameStart, std::string countrystart, const std::string &endIATA) {
+    vector<Airport*> airportsStart = findAirportsInCity(CityNameStart,countrystart);
+    vector<Airport*> airportsEnd = {findAirport(endIATA)};
+
+    return shortestPathsAuxiliary(airportsStart, airportsEnd);
+}
+
+std::vector<std::vector<Airport *>>
+Network::shortestPathsCityToName(std::string CityNameStart, std::string countrystart, const std::string& airportNameEnd) {
+    vector<Airport*> airportsStart = findAirportsInCity(CityNameStart,countrystart);
+    vector<Airport*> airportsEnd = {findAirportByName(airportNameEnd)};
+
+    return shortestPathsAuxiliary(airportsStart, airportsEnd);
+}
+
+std::vector<std::vector<Airport *>>
+Network::shortestPathsCityToCoord(std::string CityNameStart, std::string countrystart, float latitudeEnd, float longitudeEnd) {
+    vector<Airport*> airportsStart = findAirportsInCity(CityNameStart,countrystart);
+    vector<Airport*> airportsEnd = findClosestAirports(latitudeEnd, longitudeEnd);
+
+    return shortestPathsAuxiliary(airportsStart, airportsEnd);
+}
+
+std::vector<std::vector<Airport *>>
+Network::shortestPathsCoordinateToIATA(float latitudeStart, float longitudeStart, const string &endIATA) {
+    vector<Airport*> airportsStart = findClosestAirports(latitudeStart, longitudeStart);
+    vector<Airport*> airportsEnd = {findAirport(endIATA)};
+
+    return shortestPathsAuxiliary(airportsStart, airportsEnd);
+}
+
+std::vector<std::vector<Airport *>>
+Network::shortestPathsCoordinateToName(float latitudeStart, float longitudeStart, const string &airportNameEnd) {
+    vector<Airport*> airportsStart = findClosestAirports(latitudeStart, longitudeStart);
+    vector<Airport*> airportsEnd = {findAirportByName(airportNameEnd)};
+
+    return shortestPathsAuxiliary(airportsStart, airportsEnd);
+}
+
+std::vector<std::vector<Airport *>>
+Network::shortestPathsCoordinateToName(float latitudeStart, float longitudeStart, std::string CityNameEnd, std::string countryEnd) {
+    vector<Airport*> airportsStart = findClosestAirports(latitudeStart, longitudeStart);
+    vector<Airport*> airportsEnd = findAirportsInCity(CityNameEnd, countryEnd);
+
+    return shortestPathsAuxiliary(airportsStart, airportsEnd);
+}
+

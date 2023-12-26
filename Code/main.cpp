@@ -62,7 +62,7 @@ int main(int argc, char* argv[]) {
         }
     }*/
 
-    for(auto v: network.shortestPathsIATAtoName("LIS","Barajas")) {
+    for(auto v: network.shortestPathsNametoIATA("Lisboa","MAD")) {
         cout<<1<<endl;
         for(auto a: v) {
             cout<<a->getName()<<endl;

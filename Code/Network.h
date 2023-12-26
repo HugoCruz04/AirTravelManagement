@@ -39,6 +39,7 @@ public:
     void readFlights(const std::string fileName);
     void readAirlines(const std::string fileName);
     void loadNetwork(const std::string aiportsFileName, const std::string flightsFileName);
+
     int getAirportsNum() const; //3.i
     int getFligthsNum() const;  //3.i
     int getFligthsNumPerCity(const std::string& city, const std::string& Country) const;           //3.iii
@@ -49,8 +50,9 @@ public:
     void getDestNumFromAtDist(std::string IATA, int distance,int &airports, int &cities, int &countries); //3.vi ???
 
     int shortestPathNR(std::string start, std::string end);
-    std::unordered_set<std::pair< std::string, std::string>, PairHash> findDiameter();//3.vii //saber se pede mesmo o diametro, acho q n
-    void listmaxstopsbetweenairports(int & stops, std::vector<std::pair<Airport*, Airport*>> &airports);
+    std::unordered_set<std::pair< std::string, std::string>, PairHash> findDiameter();//extra... n é pedido
+
+    void maxstopsbetweenairportsAuxiliary(int & stops, std::vector <std::pair<Airport *, Airport *>> &airports);//3.vii
     int calculateStopsBFS(Airport* source, std::vector<std::pair<Airport*, Airport*>> &aux);
 
     std::vector<Airport*> findTopKAirports(int k); //3.viii

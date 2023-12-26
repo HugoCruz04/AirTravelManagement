@@ -8,7 +8,7 @@ using namespace std;
 
 Airport::Airport(std::string IATA, std::string name, std::string city, std::string country, float latitude,
                  float longitude):IATA(std::move(IATA)), name(std::move(name)), city(std::move(city)), country(std::move(country)),
-                 latitude(latitude), longitude(longitude) {}
+                 latitude(latitude), longitude(longitude) {this->indegree=0;}
 
 string Airport::getIATA() const {return IATA;}
 string Airport::getName() const {return name;}
@@ -80,5 +80,17 @@ bool Airport::isProcessing() const {
 
 void Airport::setProcessing(bool v) {
     processing=v;
+}
+
+void Airport::increaseIndegree() {
+    indegree++;
+}
+
+int Airport::getIndegree() {
+    return indegree;
+}
+
+int Airport::getTrafic() {
+    return flights.size()+indegree;
 }
 

@@ -63,6 +63,7 @@ void Network::readFlights(const std::string fileName) {
 
             Airport* sourceAirport = findAirport(source);
             Airport* dest = findAirport(target);
+            dest->increaseIndegree();
             if (sourceAirport) {
                 Flight flight(source, target, airline,dest);
                 sourceAirport->addFlight(flight);
@@ -283,7 +284,7 @@ std::vector<Airport *> Network::findTopKAirports(int k) {
 // Using std::copy with std::back_inserter
     std::copy(Airports.begin(), Airports.end(), std::back_inserter(sortedAirports));
     std::sort(sortedAirports.begin(), sortedAirports.end(), [sortedAirports](const auto& a, const auto& b) {
-        return a->getFlightsNum() > b->getFlightsNum();
+        return a->getTrafic() > b->getTrafic();
     });
     std::vector<Airport *> res;
     for (int i = 0; i < k && i < sortedAirports.size(); i++) {
@@ -388,60 +389,60 @@ unordered_set<pair<std::string, std::string>, PairHash> Network::findDiameter() 
     return res;
 }
 
-void Network::listmaxstopsbetweenairports(int & stops, vector<pair<Airport*, Airport*>> &airports) {
-    int maxStops = 0;
+void Network::maxstopsbetweenairportsAuxiliary(int & stops, vector<pair<Airport*, Airport*>> &airports) {
+    int stopsNum = 0;
     vector<pair<Airport*, Airport*>> maxTripAirports;
 
-    for (auto sourceVertex : Airports) {
+    for (Airport* sourceAirport : Airports) {
         vector<pair<Airport*, Airport*>> aux;
-        int stops = calculateStopsBFS(sourceVertex, aux);
-        if (stops > maxStops) {
-            maxStops = stops;
+        int stops = calculateStopsBFS(sourceAirport, aux);
+        if (stops > stopsNum) {
+            stopsNum = stops;
             maxTripAirports = aux;
-        } else if (stops == maxStops) {
+        } else if (stops == stopsNum) {
             maxTripAirports.insert(maxTripAirports.end(),aux.begin(),aux.end());
 
         }
     }
 
-    stops = maxStops;
+    stops = stopsNum;
     airports = maxTripAirports;
 
 }
 
 int Network::calculateStopsBFS(Airport* source, vector<pair<Airport*, Airport*>> &aux) {
-    int maxdistance = 0;
-    for(auto *vertex:Airports){
-        vertex->setVisited(false);
-        vertex->setProcessing(false);
+    int distmax = 0;
+    for(Airport* airport:Airports){
+        airport->setVisited(false);
+        airport->setProcessing(false);
     }
     std::queue<std::pair<Airport*, int>> q;
     q.push({source, 0});
     source->setProcessing(true);
 
     while (!q.empty()) {
-        auto current = q.front().first;
-        if(q.front().second>maxdistance){
-            maxdistance=q.front().second;
+        Airport* current = q.front().first;
+        if(q.front().second > distmax){
+            distmax=q.front().second;
             vector<pair<Airport*, Airport*>> ve;
             ve.push_back({source,current});
             aux = ve;
-        }else if(q.front().second==maxdistance){
+        }else if(q.front().second == distmax){
             aux.push_back({source,current});
         }
 
-        for (const Flight& edge : current->getFlights()) {
-            if(edge.getDest()->isVisited()) continue;
-            if(edge.getDest()->isProcessing()) continue;
-            q.push({edge.getDest(),q.front().second+1});
-            edge.getDest()->setProcessing(true);
+        for (const Flight& flight : current->getFlights()) {
+            if(flight.getDest()->isVisited()) continue;
+            if(flight.getDest()->isProcessing()) continue;
+            q.push({flight.getDest(), q.front().second + 1});
+            flight.getDest()->setProcessing(true);
         }
         q.pop();
         current->setVisited(true);
         current->setProcessing(false);
     }
 
-    return maxdistance;
+    return distmax;
 }
 
 std::vector<std::vector<Airport*>> Network::shortestPathsIATA(const std::string& startIATA, const std::string& endIATA) {

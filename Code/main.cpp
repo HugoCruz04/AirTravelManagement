@@ -64,13 +64,11 @@ int main(int argc, char* argv[]) {
     int airp, cit, count;
     network.getDestNumFromAtDist("CDG", 0,airp, cit, count);
     cout<<airp<<' '<<cit<<' '<<count;*/
-    int stops;
-    vector<pair<Airport*, Airport*>> airports;
-    network.listmaxstopsbetweenairports(stops, airports);
-    cout<<stops<<endl;
-    for (auto s: airports) {
-        cout<<s.first->getIATA()<<' '<<s.second->getIATA()<<endl;
+    vector<Airport*> n = network.findTopKAirports(10);
+    for(auto x: n) {
+        cout<<x->getName()<<' '<<x->getTrafic()<<endl;
     }
+
 
 
     return 0;

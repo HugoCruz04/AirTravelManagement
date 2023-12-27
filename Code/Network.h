@@ -1,4 +1,5 @@
 #include <set>
+#include <map>
 #include <unordered_set>
 #include <string>
 #include <vector>
@@ -31,7 +32,8 @@ private:
     std::vector<Airport*> Airports;
     std::vector<Airline> Airlines;
 public:
-
+    void setAirports(const std::vector<Airport *> &airports);
+    void setAirlines(const std::vector<Airline> &airlines);
     std::vector<Airport*> getAirports();
     std::vector<Airline> getAirlines();
     void addAirport(std::string IATA, std::string name, std::string city, std::string country, float latitude, float longitude);
@@ -63,6 +65,8 @@ public:
     std::vector<Airport*> findAirportsInCity(std::string CityName, std::string countryName);
     std::vector<Airport*> findClosestAirports(float latitude, float longitude);
 
+    Airline findAirline(std::string code);
+
     //**4**
     std::vector<std::vector<Airport *>> shortestPathsAuxiliary(std::vector<Airport*> airportsStart, std::vector<Airport*> airportsEnd);
 
@@ -89,7 +93,19 @@ public:
     std::vector<std::vector<Airport*>> shortestPathsCoordinateToName(float latitudeStart, float longitudeStart, const std::string& airportNameEnd);
     std::vector<std::vector<Airport*>> shortestPathsCoordinateToName(float latitudeStart, float longitudeStart, std::string CityNameEnd, std::string countryEnd);
 
+    // 5
 
-};
+    Network filterByAirlines(std::vector<Airline> airlines);       /*  Parameters:
+                                                                -set of chosen airlines
+                                                    Returns new Network with flights filtered
+                                                    by the chosen airlines.*/
+    std::vector<Flight*> minAirline(std::vector<std::vector<Airport*>> path); // return the flights in path
+                                                                            //using the minimum amount of airlines
+                                                                            //parameteres should be the output of fucntions in ex 4
+ };
+
+
+
+
 
 #endif //PROJETO_2_NETWORK_H

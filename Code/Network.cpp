@@ -11,6 +11,15 @@
 
 using namespace std;
 
+void Network::setAirports(const vector<Airport *> &airports) {
+    Airports = airports;
+}
+
+void Network::setAirlines(const vector<Airline> &airlines) {
+    Airlines = airlines;
+}
+
+
 void Network::readAiports(std::string fileName) {
     ifstream  file(fileName);
 
@@ -230,6 +239,7 @@ void Network::getDestNumFrom(std::string IATA, int &airports, int &cities, int &
 void Network::addAirport(std::string IATA, std::string name, std::string city, std::string country, float latitude,float longitude) {
     Airports.push_back(new Airport(IATA,name, city, country, latitude, longitude));
 }
+
 
 /*void nodesAtDistanceDFSVisit(const Network *g, Airport *v, int k, set<std::string> &airportsIATAs, set<std::string> &citiesNames, set<std::string> &countriesNames) {
 
@@ -664,7 +674,7 @@ Network::shortestPathsCoordinateToName(float latitudeStart, float longitudeStart
     return shortestPathsAuxiliary(airportsStart, airportsEnd);
 }
 
-std::vector<std::vector<Airport *>>
+vector<std::vector<Airport *>>
 Network::shortestPathsCoordinateToName(float latitudeStart, float longitudeStart, std::string CityNameEnd, std::string countryEnd) {
     vector<Airport*> airportsStart = findClosestAirports(latitudeStart, longitudeStart);
     vector<Airport*> airportsEnd = findAirportsInCity(CityNameEnd, countryEnd);
@@ -672,3 +682,38 @@ Network::shortestPathsCoordinateToName(float latitudeStart, float longitudeStart
     return shortestPathsAuxiliary(airportsStart, airportsEnd);
 }
 
+
+
+// 5 ///////////////////////////////////////////////////////////////
+Network Network::filterByAirlines(vector<Airline> const airlines){
+    Network newNetwork= Network();
+    newNetwork.setAirlines(airlines);
+    for(auto airport: this->getAirports()){
+        newNetwork.addAirport(airport->getIATA(),airport->getName(),airport->getCity(),airport->getCountry(),airport->getLatitude(),airport->getLongitude());
+        for(auto flight : airport->getFlights()){
+            for(auto airline: airlines){
+                if(airline.getcode()==flight.getAirline()){
+                    auto p=newNetwork.findAirport(airport->getIATA());
+                    p->addFlight(flight);
+                }
+            }
+        }
+    }
+    return newNetwork;
+}
+
+Airline Network::findAirline(std::string code) {
+    for(Airline a: this->getAirlines()) if(a.getcode()==code) return a;
+}
+
+/*
+std::vector<Flight*> Network::minAirline(std::vector<std::vector<Airport *>> path) {
+    int max=0;
+    map<string, int> usages;
+    for(auto p: path){
+        for(auto airport: p){
+            
+        }
+    }
+}
+*/

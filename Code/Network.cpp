@@ -188,6 +188,20 @@ int Network::numberOfCountriesACityFliesTo(const string& City, const string& Cou
     return countries.size();
 }
 
+
+void Network::dfsVisit(Airport* v,std::unordered_set<std::string> &airports, std::unordered_set<pair<std::string,std::string>, PairHash> &cities, std::unordered_set<std::string> &countries) const {
+    v->setVisited(true);
+    airports.insert(v->getIATA());
+    cities.insert({v->getCity(),v->getCountry()});
+    countries.insert(v->getCountry());
+    for(auto &e: v->getFlights()) {
+        auto w=e.getDest();
+        if(!w->isVisited()) dfsVisit(w, airports, cities, countries);
+    }
+
+}
+
+
 void Network::getDestNumFrom(std::string IATA, int &airports, int &cities, int &countries) {
     Airport* airport = findAirport(IATA);
 
@@ -196,17 +210,17 @@ void Network::getDestNumFrom(std::string IATA, int &airports, int &cities, int &
         airports = cities = countries = 0;
         return;
     }
+    for(Airport *d : Airports) {
+        d->setVisited(false);
+    }
 
     std::unordered_set<std::string> airportsIATAs;
-    std::unordered_set<std::string> citiesNames;
+    std::unordered_set<pair<std::string,std::string>, PairHash> citiesNames;
     std::unordered_set<std::string> countriesNames;
-    for (const Flight& flight: airport->getFlights()) {
-        Airport* w= flight.getDest();
-        airportsIATAs.insert(w->getIATA());
-
-        citiesNames.insert(w->getCity());
-        countriesNames.insert(w->getCountry());
-
+    for(Flight v : airport->getFlights()) {
+        if (!v.getDest()->isVisited()) {
+            dfsVisit(v.getDest(), airportsIATAs,citiesNames, countriesNames);
+        }
     }
     airports=airportsIATAs.size();
     cities=citiesNames.size();

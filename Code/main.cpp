@@ -4,10 +4,11 @@ using namespace std;
 
 int main(int argc, char* argv[]) {
     Network network;
-    network.readAiports("dataset/airports.csv");
-    network.readAirlines("dataset/airlines.csv");
-    network.readFlights("dataset/flights.csv");
-    /*
+    network.readAiports("dataset/airports_test.csv");
+    network.readAirlines("dataset/airlines_test.csv");
+    network.readFlights("dataset/flights_test.csv");
+
+
     cout<<network.getFligthsNum()<<endl;        //3.i
     cout<<network.getAirportsNum()<<endl;
 
@@ -48,7 +49,7 @@ int main(int argc, char* argv[]) {
 
     //4 é simples. Percebe se nas funçoes
 
-    */
+
     //5
     Airline tap= network.findAirline("1QA");
     vector<Airline> v ;
@@ -60,7 +61,11 @@ int main(int argc, char* argv[]) {
         }
     }
 
-
-
+/*
+    auto v=network.minAirline("LIS","MAD");
+    for(auto i:v){
+        for(auto f:i) cout<<f.getAirline()<<endl;
+    }
     return 0;
+    */
 }

@@ -3,6 +3,7 @@
 #include "Flight.h"
 
 #include <unordered_set>
+#include <unordered_map>
 #include <queue>
 #include <stack>
 #include <cmath>
@@ -469,45 +470,69 @@ int Network::calculateStopsBFSAux(Airport* source, std::vector<std::pair<Airport
     return distmax;
 }
 
+
+
+
 std::vector<std::vector<Airport*>> Network::shortestPathsIATA(const std::string& startIATA, const std::string& endIATA) {
-    Airport* airport = findAirport(startIATA);
-    Airport* endAirp = findAirport(endIATA);
-    if (airport == nullptr || endAirp == nullptr) {
-        return {}; // Invalid input, return an empty vector
+    Airport* startAirport = findAirport(startIATA);
+    Airport* endAirport = findAirport(endIATA);
+    if (startAirport == nullptr || endAirport == nullptr) {
+        return {};
     }
 
-    std::vector<std::vector<Airport*>> paths; // Vector to store the paths
-    std::queue<std::vector<Airport*>> q; // Queue of paths
-    std::unordered_set<Airport*> visited;
+    // Priority queue to explore paths in increasing order of length
+    std::priority_queue<std::pair<int, std::vector<Airport*>>, std::vector<std::pair<int, std::vector<Airport*>>>, std::greater<>> pq;
 
-    q.push({airport}); // Start with a path containing only the starting airport
-    visited.insert(airport);
+    // Map to store the shortest distances to each airport
+    std::unordered_map<Airport*, int> distance;
 
-    while (!q.empty()) {
-        int size = q.size();
-        for (int i = 0; i < size; i++) {
-            std::vector<Airport*> currentPath = q.front();
-            Airport* w = currentPath.back();
-            q.pop();
+    // Initialize the distance map
+    distance[startAirport] = 0;
 
-            if (w == endAirp) {
-                paths.push_back(currentPath); // Found a path to the destination
-            }
+    // Push the start airport onto the priority queue
+    pq.push({0, {startAirport}});
 
-            for (Flight flight : w->getFlights()) {
-                Airport* dest = flight.getDest();
-                if (visited.find(dest) == visited.end()) {
-                    std::vector<Airport*> newPath = currentPath;
-                    newPath.push_back(dest);
-                    q.push(newPath);
-                    visited.insert(dest);
-                }
+    // Set to store unique paths
+    std::set<std::vector<Airport*>> uniquePaths;
+
+    while (!pq.empty()) {
+        auto current = pq.top();
+        pq.pop();
+
+        int currentDistance = current.first;
+        auto currentPath = current.second;
+        Airport* currentNode = currentPath.back();
+
+        // If we reached the end airport, add the path to the set of unique paths
+        if (currentNode == endAirport) {
+            uniquePaths.insert(currentPath);
+        }
+
+        // Explore neighboring airports
+        for (const auto& flight : currentNode->getFlights()) {
+            Airport* neighbor = flight.getDest();
+
+            int newDistance = currentDistance + 1;  // Assuming all flights have the same weight
+
+            // If the new path is shorter or the distance hasn't been calculated yet
+            if (distance.find(neighbor) == distance.end() || newDistance < distance[neighbor]) {
+                distance[neighbor] = newDistance;
+                std::vector<Airport*> newPath = currentPath;
+                newPath.push_back(neighbor);
+                pq.push({newDistance, newPath});
+            } else if (newDistance == distance[neighbor]) {
+                // If the new path has the same distance as the known shortest path
+                std::vector<Airport*> newPath = currentPath;
+                newPath.push_back(neighbor);
+                pq.push({newDistance, newPath});
             }
         }
     }
 
-    return paths;
+    // Convert the set of unique paths to a vector and return
+    return std::vector<std::vector<Airport*>>(uniquePaths.begin(), uniquePaths.end());
 }
+
 
 std::vector<std::vector<Airport *>>Network::shortestPathsName(const string &airportNameStart, const string &airportNameEnd) {
     vector<Airport*> airportsStart={findAirportByName(airportNameStart)};

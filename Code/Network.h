@@ -102,9 +102,10 @@ public:
                                                                 -set of chosen airlines
                                                     Returns new Network with flights filtered
                                                     by the chosen airlines.*/
-    std::vector<Flight*> minAirline(std::vector<std::vector<Airport*>> path); // return the flights in path
+    std::vector<std::vector<Flight>> minAirline(std::string startIATA, std::string destIATA); // return the flights in path
                                                                             //using the minimum amount of airlines
-                                                                            //parameteres should be the output of fucntions in ex 4
+                                                                            //parameteres should be the output of fucntions in ex 4//
+    void airlineDFS(Airport* start, Airport* current, Airport* dest, std::vector<std::vector<Flight>>& paths, std::vector<Flight>& currentPath);
  };
 
 

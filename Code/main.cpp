@@ -1,13 +1,14 @@
 #include "Network.h"
+#include "Menu.h"
 #include <iostream>
 using namespace std;
 
 int main(int argc, char* argv[]) {
+   /*
     Network network;
-    network.readAiports("dataset/airports_test.csv");
-    network.readAirlines("dataset/airlines_test.csv");
-    network.readFlights("dataset/flights_test.csv");
-
+    network.readAiports("dataset/airports.csv");
+    network.readAi1rlines("dataset/airlines.csv");
+    network.readFlights("dataset/flights.csv");
 
     cout<<network.getFligthsNum()<<endl;        //3.i
     cout<<network.getAirportsNum()<<endl;
@@ -23,7 +24,7 @@ int main(int argc, char* argv[]) {
     network.getDestNumFrom("CDG",airports,cities,countries);
     cout<<airports<<' '<<cities<<' '<<countries<<endl;
 
-    network.getDestNumFromAtDist("CDG", 3, airports,cities,countries); //3.vi
+    network.getDestNumFromAtDist("CDG", 3, airports,cities,countries);  //3.vi
     cout<<airports<<' '<<cities<<' '<<countries<<endl;
 
     int stops;                                                          //3.vii
@@ -50,22 +51,10 @@ int main(int argc, char* argv[]) {
     //4 é simples. Percebe se nas funçoes
 
 
-    //5
-    Airline tap= network.findAirline("1QA");
-    vector<Airline> v ;
-    v.push_back(tap);
-    Network newNetwork= network.filterByAirlines(v);
-    for(auto a: newNetwork.getAirports()){
-        for(auto f: a->getFlights()){
-            cout<<f.getSource()<<"\\n"<<endl;
-        }
-    }
-
-/*
-    auto v=network.minAirline("LIS","MAD");
-    for(auto i:v){
-        for(auto f:i) cout<<f.getAirline()<<endl;
-    }
-    return 0;
     */
+    Menu menu;
+    menu.run();
+
+
+    return 0;
 }

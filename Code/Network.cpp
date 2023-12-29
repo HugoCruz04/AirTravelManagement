@@ -474,12 +474,59 @@ int Network::calculateStopsBFSAux(Airport* source, std::vector<std::pair<Airport
 
 
 std::vector<std::vector<Airport*>> Network::shortestPathsIATA(const std::string& startIATA, const std::string& endIATA) {
-    Airport* startAirport = findAirport(startIATA);
-    Airport* endAirport = findAirport(endIATA);
-    if (startAirport == nullptr || endAirport == nullptr) {
-        return {};
-    }
+    vector<Airport*> airportsStart={findAirport(startIATA)};
+    vector<Airport*> airportsEnd={findAirport(endIATA)};
 
+    return shortestPathsAuxiliary(airportsStart, airportsEnd);
+}
+
+
+std::vector<std::vector<Airport *>>Network::shortestPathsName(const string &airportNameStart, const string &airportNameEnd) {
+    vector<Airport*> airportsStart={findAirportByName(airportNameStart)};
+    vector<Airport*> airportsEnd={findAirportByName(airportNameEnd)};
+
+    return shortestPathsAuxiliary(airportsStart, airportsEnd);
+}
+
+vector<Airport*> Network::findAirportsInCity(const string CityName, const std::string countryName) {
+    vector<Airport*> res;
+    for(Airport* airport: Airports) {
+        if (airport->getCity() == CityName && airport->getCountry()==countryName){
+            res.push_back(airport);
+        }
+    }
+    return res;
+}
+
+std::vector<std::vector<Airport*>> Network::shortestPathsCitys(std::string CityNameStart, std::string countrystart, std::string CityNameEnd, std::string countryEnd) {
+    std::vector<Airport*> airportsStart = findAirportsInCity(CityNameStart, countrystart);
+    std::vector<Airport*> airportsEnd = findAirportsInCity(CityNameEnd, countryEnd);
+
+
+    return shortestPathsAuxiliary(airportsStart, airportsEnd);
+}
+
+std::vector<Airport*> Network::findClosestAirports(float latitudedeg, float longitudedeg) {
+    float latitude = latitudedeg * M_PI /180;
+    float longitude = longitudedeg * M_PI /180;
+    float min = std::numeric_limits<float>::max();
+    vector<Airport*> res;
+    for(Airport* airport: Airports) {
+        float airlat = airport->getLatitude() * M_PI /180;
+        float airlong = airport->getLongitude() * M_PI /180;
+        float candidate = 2*6367.5165* asin(sqrt(sin((latitude-airlat)/2)*sin((latitude-airlat)/2)+cos(airlat)*cos(latitude)*sin((longitude-airlong)/2)*sin((longitude-airlong)/2)));
+        if(min>candidate || res.empty()) {
+            min=candidate;
+            res.clear();
+        }
+        if(min==candidate) {
+            res.push_back(airport);
+        }
+    }
+    return res;
+}
+
+std::vector<std::vector<Airport*>> shortestPaths4(Airport* startAirport,Airport* endAirport) {
     // Priority queue to explore paths in increasing order of length
     std::priority_queue<std::pair<int, std::vector<Airport*>>, std::vector<std::pair<int, std::vector<Airport*>>>, std::greater<>> pq;
 
@@ -533,57 +580,12 @@ std::vector<std::vector<Airport*>> Network::shortestPathsIATA(const std::string&
     return std::vector<std::vector<Airport*>>(uniquePaths.begin(), uniquePaths.end());
 }
 
-
-std::vector<std::vector<Airport *>>Network::shortestPathsName(const string &airportNameStart, const string &airportNameEnd) {
-    vector<Airport*> airportsStart={findAirportByName(airportNameStart)};
-    vector<Airport*> airportsEnd={findAirportByName(airportNameEnd)};
-
-    return shortestPathsAuxiliary(airportsStart, airportsEnd);
-}
-
-vector<Airport*> Network::findAirportsInCity(const string CityName, const std::string countryName) {
-    vector<Airport*> res;
-    for(Airport* airport: Airports) {
-        if (airport->getCity() == CityName && airport->getCountry()==countryName){
-            res.push_back(airport);
-        }
-    }
-    return res;
-}
-
-std::vector<std::vector<Airport*>> Network::shortestPathsCitys(std::string CityNameStart, std::string countrystart, std::string CityNameEnd, std::string countryEnd) {
-    std::vector<Airport*> airportsStart = findAirportsInCity(CityNameStart, countrystart);
-    std::vector<Airport*> airportsEnd = findAirportsInCity(CityNameEnd, countryEnd);
-
-
-    return shortestPathsAuxiliary(airportsStart, airportsEnd);
-}
-
-std::vector<Airport*> Network::findClosestAirports(float latitudedeg, float longitudedeg) {
-    float latitude = latitudedeg * M_PI /180;
-    float longitude = longitudedeg * M_PI /180;
-    float min = std::numeric_limits<float>::max();
-    vector<Airport*> res;
-    for(Airport* airport: Airports) {
-        float airlat = airport->getLatitude() * M_PI /180;
-        float airlong = airport->getLongitude() * M_PI /180;
-        float candidate = 2*6367.5165* asin(sqrt(sin((latitude-airlat)/2)*sin((latitude-airlat)/2)+cos(airlat)*cos(latitude)*sin((longitude-airlong)/2)*sin((longitude-airlong)/2)));
-        if(min>candidate || res.empty()) {
-            min=candidate;
-            res.clear();
-        }
-        if(min==candidate) {
-            res.push_back(airport);
-        }
-    }
-    return res;
-}
 std::vector<std::vector<Airport *>> Network::shortestPathsAuxiliary(std::vector<Airport*> airportsStart, std::vector<Airport*> airportsEnd) {
     std::vector<std::vector<Airport*>> res;
 
     for (Airport* startAirport : airportsStart) {
         for (Airport* endAirport : airportsEnd) {
-            std::vector<std::vector<Airport*>> temp = shortestPathsIATA(startAirport->getIATA(), endAirport->getIATA());
+            std::vector<std::vector<Airport*>> temp = shortestPaths4(startAirport, endAirport);
 
             if (temp.empty()) {
                 continue;  // Skip empty paths

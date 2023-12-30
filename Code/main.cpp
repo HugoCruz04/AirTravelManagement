@@ -7,7 +7,7 @@ int main(int argc, char* argv[]) {
    /*
     Network network;
     network.readAiports("dataset/airports.csv");
-    network.readAi1rlines("dataset/airlines.csv");
+    network.readAirlines("dataset/airlines.csv");
     network.readFlights("dataset/flights.csv");
 
     cout<<network.getFligthsNum()<<endl;        //3.i

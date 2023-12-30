@@ -59,13 +59,13 @@ void Menu::statistics(Network network) {
     cout << "╒═════════════════════════════════════════════╕\n"
             "│             Network Statistics              │\n"
             "╞═════════════════════════════════════════════╡\n"
-            "│ Registered airports: " << network.getAirportsNum() << "                   │\n"
-            "│ Available flights: " << network.getFligthsNum() << "                    │\n"
+            "│       Registered airports: " << network.getAirportsNum() << "             │\n"
+            "│       Available flights: " << network.getFligthsNum() << "              │\n"
             "│                                             │\n"
             "│ > Check airport statistics              [1] │\n"
             "│ > Check number of flights (w/ filters)  [2] │\n"
             "│ > Number of countries a city flies to   [3] │\n" //iv pt2
-            "│ > Flight trip(s) with the most stops    [5] │\n"
+            "│ > Flight trip(s) with the most stops    [4] │\n"
             "│                                             │\n"
             "│                                             │\n"
             "│ > Back [0]                       > Quit [q] │\n"
@@ -95,6 +95,14 @@ void Menu::statistics(Network network) {
         case 2:
             nextPage();
             flightStatistics(network);
+            break;
+        case 3:
+            nextPage();
+            insertCountryAndCityName(network, 2);
+            break;
+        case 4:
+            nextPage();
+            //todo
             break;
     }
 }
@@ -150,7 +158,7 @@ void Menu::airportStatistics(Network network) {
             break;
         case 5:
             nextPage();
-           //todo
+            insertAirportName(network,5);
             break;
         case 6:
             nextPage();
@@ -167,7 +175,7 @@ void Menu::airportStatistics(Network network) {
 void Menu::insertAirportName(Network network, int option) {
 
     cout << "╒═════════════════════════════════════════════╕\n"
-            "│              Flights per Airport            │\n"
+            "│                Airport Name                 │\n"
             "╞═════════════════════════════════════════════╡\n"
             "│          > Type the Airport name            │\n"
             "│                                             │\n"
@@ -217,6 +225,10 @@ void Menu::insertAirportName(Network network, int option) {
         case 4:
             nextPage();
             availableDestinations(network,airport);
+            break;
+        case 5:
+            nextPage();
+            insertNumberOfStops(network,airport);
             break;
     }
 
@@ -331,18 +343,97 @@ void Menu::availableDestinations(Network network, Airport *airport) {
     }
 }
 
-void Menu::reachableDestinationsWithXStops(Network network, Airport *airport) {
+void Menu::insertNumberOfStops(Network network, Airport *airport) {
+    cout << "╒═════════════════════════════════════════════╕\n"
+            "│                Number of Stops              │\n"
+            "╞═════════════════════════════════════════════╡\n"
+            "│ > Type the max number of stops in your trip │\n"
+            "│                                             │\n"
+            "╘═════════════════════════════════════════════╛\n"
+            "                                               \n";
+    string cmd;
 
+    getline(cin, cmd);
+
+    while( stoi(cmd) < 0){
+        cout<<"ERROR: Choose a valid number \n";
+        getline(cin, cmd);
+    }
+
+    nextPage();
+    reachableDestinationsWithXStops(network, airport, stoi(cmd));
+}
+
+void Menu::reachableDestinationsWithXStops(Network network, Airport *airport, int stops) {
+    int cities, airports, countries;
+
+    network.getDestNumFromAtDist(airport->getIATA(), stops, airports,cities,countries);
+
+    cout << "╒═════════════════════════════════════════════╕\n"
+            "│             Available destinations          │\n"
+            "╞═════════════════════════════════════════════╡\n"
+            "│ Given a maximum of " << stops << " stops:                 │\n"
+            "│ " <<airport->getIATA()<<" has available flights to:               │\n"
+            "│                                             │\n"
+            "│ "<<cities<<" cities                                 │\n"
+            "│ "<<countries<<" countries                               │\n"
+            "│ "<<airports<<"  airports                              │\n"
+            "│                                             │\n"
+            "│ > Back [0]                       > Quit [q] │\n"
+            "╘═════════════════════════════════════════════╛\n"
+            "                                               \n";
+    string cmd;
+    getline(cin, cmd);
+
+    if (cmd=="q") quit();
+
+    if(cmd == "0"){
+        nextPage();
+        airportStatistics(network);
+    }
+
+    while(cmd !="q" && cmd != "0"){
+        cout<<"ERROR: Choose a valid option \n";
+        getline(cin, cmd);
+    }
 }
 
 void Menu::topKAirport(Network network) {
 
     vector<Airport*> airp = network.findTopKAirports(5);
+
     for(auto a: airp) {
         cout<<a->getName() <<"  num of flights departing and arriving:"<< a->getTrafic()<<endl;
     }
+
+    cout << "╒═════════════════════════════════════════════╕\n"
+            "│             Available destinations          │\n"
+            "╞═════════════════════════════════════════════╡\n"
+            "│                                             │\n"
+
+            "│ > Back [0]                       > Quit [q] │\n"
+            "╘═════════════════════════════════════════════╛\n"
+            "                                               \n";
+string cmd;
+    getline(cin, cmd);
+
+    if (cmd=="q") quit();
+
+    if(cmd == "0"){
+        nextPage();
+        airportStatistics(network);
+    }
+
+    while(cmd !="q" && cmd != "0"){
+        cout<<"ERROR: Choose a valid option \n";
+        getline(cin, cmd);
+    }
+
 }
 
+void Menu::essentialAirports(Network network) {
+
+}
 
 void Menu::flightStatistics(Network network) {
     cout << "╒═════════════════════════════════════════════╕\n"
@@ -378,7 +469,7 @@ void Menu::flightStatistics(Network network) {
             break;
         case 2:
             nextPage();
-            insertCountryAndCityName(network);
+            insertCountryAndCityName(network,1);
             break;
         case 3:
            //todo
@@ -452,7 +543,7 @@ void Menu::flightsPerAirline(Network network, std::string airlineName) {
 
 }
 
-void Menu::insertCountryAndCityName(Network network) {
+void Menu::insertCountryAndCityName(Network network, int option) {
     cout << "╒═════════════════════════════════════════════╕\n"
             "│              Flights per City               │\n"
             "╞═════════════════════════════════════════════╡\n"
@@ -483,19 +574,39 @@ void Menu::insertCountryAndCityName(Network network) {
         }
 
         if(cmd=="0"){
-            nextPage();
-            flightStatistics(network);
+            switch (option){
+                case 1:
+                    nextPage();
+                    flightStatistics(network);
+                    break;
+                case 2:
+                    nextPage();
+                    statistics(network);
+                    break;
+
+            }
+
         }
 
         if(cmd=="r"){
             nextPage();
-            insertCountryAndCityName(network);
+            insertCountryAndCityName(network,option);
         }
 
     }
+    switch (option){
+        case 1:
+            nextPage();
+            flightsPerCity(network,city,country);
+            break;
+        case 2:
+            nextPage();
+            availableCountriesForACity(network,city,country);
+            break;
 
-    nextPage();
-    flightsPerCity(network,city,country);
+    }
+
+
 }
 
 void Menu::flightsPerCity(Network network, std::string cityName, std::string countryName) {
@@ -523,6 +634,59 @@ void Menu::flightsPerCity(Network network, std::string cityName, std::string cou
     }
 
 }
+
+void Menu::availableCountriesForACity(Network network, std::string cityName, std::string countryName) {
+    cout << "╒═════════════════════════════════════════════╕\n"
+            "│             Flights per City                │\n"
+            "╞═════════════════════════════════════════════╡\n"
+            "│ The referred city has currently flights to  │\n"
+            "│ " << network.numberOfCountriesACityFliesTo(cityName, countryName) << " different countries                      │\n"
+            "│                                             │\n"
+            "│ > Back [0]                       > Quit [q] │\n"
+            "╘═════════════════════════════════════════════╛\n"
+            "                                               \n";
+    string cmd;
+    getline(cin, cmd);
+
+    if (cmd=="q") quit();
+
+    if(cmd == "0"){
+        nextPage();
+        flightStatistics(network);
+    }
+
+    while(cmd !="q" && cmd != "0"){
+        cout<<"ERROR: Choose a valid option \n";
+        getline(cin, cmd);
+    }
+}
+
+void Menu::flightTripsWithMostStops(Network network) {
+
+}
+
+void Menu::insertK(Network network) {
+    cout << "╒═════════════════════════════════════════════╕\n"
+            "│                Top airport                  │\n"
+            "╞═════════════════════════════════════════════╡\n"
+            "│ > Insert the number of  │\n"
+            "│                                             │\n"
+            "╘═════════════════════════════════════════════╛\n"
+            "                                               \n";
+    string cmd;
+
+    getline(cin, cmd);
+
+    while( stoi(cmd) < 0){
+        cout<<"ERROR: Choose a valid number \n";
+        getline(cin, cmd);
+    }
+
+    nextPage();
+}
+
+
+
 
 
 

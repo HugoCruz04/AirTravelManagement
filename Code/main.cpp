@@ -10,43 +10,6 @@ int main(int argc, char* argv[]) {
     network.readAirlines("dataset/airlines.csv");
     network.readFlights("dataset/flights.csv");
 
-    cout<<network.getFligthsNum()<<endl;        //3.i
-    cout<<network.getAirportsNum()<<endl;
-
-    Airport* airport= network.findAirport("LIS");       //3.ii
-    cout<<airport->getAirlinesNum()<<" flightsnum:" << airport->getFlights().size()<<endl;
-
-    cout<<network.getFligthsNumPerCity("Lisbon","Portugal")<<" "<<network.getFligthsNumPerAirline("TAP")<<endl; //3.iii
-
-    cout<<network.numberOfCountriesACityFliesTo("Lisbon","Portugal")<<' '<<network.numberOfCountriesAnAirportFliesTo("GKA")<<endl; //3.iv
-
-    int cities, airports, countries;                                        //3.v
-    network.getDestNumFrom("CDG",airports,cities,countries);
-    cout<<airports<<' '<<cities<<' '<<countries<<endl;
-
-    network.getDestNumFromAtDist("CDG", 3, airports,cities,countries);  //3.vi
-    cout<<airports<<' '<<cities<<' '<<countries<<endl;
-
-    int stops;                                                          //3.vii
-    vector<pair<Airport*,Airport*>> airportsSourceAndDest;
-    network.getMaxStopsBetweenAirports(stops, airportsSourceAndDest);
-    cout<<"max num of stops"<<stops<<endl;
-    for(auto airportsPair: airportsSourceAndDest) {
-        cout<<"source:"<<airportsPair.first->getName()<<" Dest:"<<airportsPair.second->getName()<<endl;
-    }
-
-    vector<Airport*> airp = network.findTopKAirports(5);                //3.viii
-    for(auto a: airp) {
-        cout<<a->getName() <<"  num of flights departing and arriving:"<< a->getTrafic()<<endl;
-    }
-
-    std::unordered_set<Airport*> airpss = network.articulationAirports();  //3.ix
-    int counter=0;
-    for(auto a: airpss) {
-        cout<<a->getName()<<endl;
-        counter++;
-    }
-    cout<<"num of essential airports:"<<counter<<endl;
 
     //4 é simples. Percebe se nas funçoes
 

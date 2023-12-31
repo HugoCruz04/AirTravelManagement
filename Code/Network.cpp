@@ -345,6 +345,12 @@ void dfs_art(Network *g, Airport *v, stack<std::string> &s, unordered_set<Airpor
 std::unordered_set<Airport *> Network::articulationAirports() {
     unordered_set<Airport*> res;
     stack<std::string> s;
+    for(auto airp : Airports) {
+        for ( auto flight: airp->getFlights()) {
+            auto w = flight.getDest();
+            w->addFlight(*new Flight(flight.getTarget(), flight.getSource(), flight.getAirline(), airp));
+        }
+    }
     int i = 0;
     for (Airport* airport : Airports) {
         airport->setNum(i);
@@ -729,9 +735,7 @@ Network Network::filterByAirlines(vector<Airline> const airlines){
     return newNetwork;
 }
 
-Airline Network::findAirline(std::string code) {
-    for(Airline a: this->getAirlines()) if(a.getcode()==code) return a;
-}
+
 
 /*
 std::vector<vector<Flight>> Network::minAirline(std::string startIATA, std::string destIATA) {

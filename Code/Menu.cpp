@@ -429,7 +429,7 @@ void Menu::topKAirport(Network network, int k) {
             "│ number of flights, with k = "<< setw(4)<<left<<k <<"            │\n"
             "│                                             │\n"
             "│  Airport: "<< setw(3)<<kAirport->getIATA() << "                               │\n"
-            "│  Number of flights:"<<setw(4)<<left<<kAirport->getTrafic() <<"                     │\n"
+            "│  Number of flights: "<<setw(4)<<left<<kAirport->getTrafic() <<"                    │\n"
             "│                                             │\n"
             "│ > Back [0]                       > Quit [q] │\n"
             "╘═════════════════════════════════════════════╛\n"

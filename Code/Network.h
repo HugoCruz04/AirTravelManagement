@@ -15,8 +15,18 @@
 #ifndef PROJETO_2_NETWORK_H
 #define PROJETO_2_NETWORK_H
 
-
+/**
+ * @brief Hash function for std::pair used in unordered_set.
+ */
 struct PairHash {
+    /**
+    * @brief Operator overload for hashing std::pair.
+    *
+    * @tparam T1 Type of the first element.
+    * @tparam T2 Type of the second element.
+    * @param p The std::pair to be hashed.
+    * @return std::size_t The hash value.
+    */
     template <class T1, class T2>
     std::size_t operator () (const std::pair<T1, T2>& p) const {
         auto h1 = std::hash<T1>{}(p.first);
@@ -27,32 +37,109 @@ struct PairHash {
     }
 };
 
+
+/**
+ * @brief The Network class represents a network, that is a Graph, of airports (Vertices) and flights (Edges).
+ *
+ * This class provides various functionalities related to airports, flights, and airlines.
+ */
 class Network{
 private:
-    std::vector<Airport*> Airports;
-    std::vector<Airline> Airlines;
+    std::vector<Airport*> Airports; /**< Vector containing pointers to Airport objects. */
+    std::vector<Airline> Airlines; /**< Vector containing Airline objects. */
 public:
     void setAirports(const std::vector<Airport *> &airports);
     void setAirlines(const std::vector<Airline> &airlines);
     std::vector<Airport*> getAirports();
     std::vector<Airline> getAirlines();
+
+    /**
+     * @brief Adds a Airport(Vertex) to the Network
+     *
+     * @param IATA
+     * @param name
+     * @param city
+     * @param country
+     * @param latitude
+     * @param longitude
+     */
     void addAirport(std::string IATA, std::string name, std::string city, std::string country, float latitude, float longitude);
+    /**
+     * @brief Reads and parses the Airports.csv file
+     *
+     * @param fileName
+     */
     void readAiports(std::string fileName);
+
+    /**
+     * @brief Reads and parses the Flights.csv file
+     *
+     * @param fileName
+     */
     void readFlights(const std::string fileName);
+
+    /**
+     * @brief Reads and parses the Airlines.csv file
+     *
+     * @param fileName
+     */
     void readAirlines(const std::string fileName);
     void loadNetwork(const std::string aiportsFileName, const std::string flightsFileName);
 
+    /**
+     * @brief 3.i Method that return the number of Airports in a Network (size of the Airports vector)
+     *
+     * @return
+     */
     int getAirportsNum() const; //3.i
+
+    /**
+     * @brief 3.i Method that return the number of Flights in a Network (sum of sizes of each Airport Flights vector inside Airports)
+     *
+     * @return
+     */
     int getFligthsNum() const;  //3.i
+
+    /**
+     * @brief 3.iii Method that returns the number of flights that are outgoing from a given city
+     *
+     * @param city
+     * @param Country
+     * @return number of flights that are outgoing from a given city
+     */
     int getFligthsNumPerCity(const std::string& city, const std::string& Country) const;           //3.iii
+
+    /**
+     * @brief 3.iii Method that returns the number of flights that are outgoing from a given Airline
+     *
+     * @param airlinecode
+     * @return number of flights that are outgoing from a given Airline
+     */
     int getFligthsNumPerAirline(const std::string& airlinecode) const; //3.iii
+
+    /**
+     * @brief 3.iv Method that returns the number of Countries that can be reached from a given Airport,
+     * using an unordered_set to count.
+     *
+     * @param AirportIATA
+     * @return
+     */
     int numberOfCountriesAnAirportFliesTo(const std::string& AirportIATA); //3.iv a)
+
+    /**
+     * @brief 3.iv Method that returns the number of Countries that can be reached from a given City,
+     * using an unordered_set to count.
+     *
+     * @param City
+     * @param Country
+     * @return
+     */
     int numberOfCountriesACityFliesTo(const std::string& City, const std::string& Country); //3.iv b)
 
     void dfsVisit(Airport* v,std::unordered_set<std::string> &airports, std::unordered_set<std::pair<std::string,std::string>, PairHash> &cities, std::unordered_set<std::string> &countries) const;
-    void getDestNumFrom(std::string IATA, int &airports, int &cities, int &countries);//3.v raciocionio esta bem??
+    void getDestNumFrom(std::string IATA, int &airports, int &cities, int &countries);//3.v
 
-    void getDestNumFromAtDist(std::string IATA, int distance,int &airports, int &cities, int &countries); //3.vi ???
+    void getDestNumFromAtDist(std::string IATA, int distance,int &airports, int &cities, int &countries); //3.vi
 
     int shortestPathNR(std::string start, std::string end);
     std::unordered_set<std::pair< std::string, std::string>, PairHash> findDiameter();//extra... n é pedido

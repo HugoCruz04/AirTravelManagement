@@ -1,6 +1,7 @@
 
 #include "Menu.h"
 #include <sstream>
+#include <iomanip>
 
 using namespace std;
 
@@ -58,8 +59,8 @@ void Menu::statistics(Network network) {
     cout << "╒═════════════════════════════════════════════╕\n"
             "│             Network Statistics              │\n"
             "╞═════════════════════════════════════════════╡\n"
-            "│       Registered airports: " << network.getAirportsNum() << "             │\n"
-            "│       Available flights: " << network.getFligthsNum() << "              │\n"
+            "│       Registered airports: " << setw(5)<<left<<network.getAirportsNum() << "            │\n"
+            "│       Available flights: " << setw(5)<<left<<network.getFligthsNum() << "              │\n"
             "│                                             │\n"
             "│ > Check airport statistics              [1] │\n"
             "│ > Check number of flights (w/ filters)  [2] │\n"
@@ -176,7 +177,7 @@ void Menu::insertAirportName(Network network, int option) {
     cout << "╒═════════════════════════════════════════════╕\n"
             "│                Airport Name                 │\n"
             "╞═════════════════════════════════════════════╡\n"
-            "│          > Type the Airport name            │\n"
+            "│          > Type the Airport code            │\n"
             "│                                             │\n"
             "│                (e.g: LIS)                   │\n"
             "│                                             │\n"
@@ -237,7 +238,7 @@ void Menu::checkAvailableAirlines(Network network, Airport* airport) {
     cout << "╒═════════════════════════════════════════════╕\n"
             "│           Current available airlines        │\n"
             "╞═════════════════════════════════════════════╡\n"
-            "│ There are currently "<< airport->getAirlinesNum()<<" available airlines   │\n"
+            "│ There are currently "<< setw(3)<<left<<airport->getAirlinesNum()<<" available airlines  │\n"
             "│                                             │\n"
             "│ > Back [0]                       > Quit [q] │\n"
             "╘═════════════════════════════════════════════╛\n"
@@ -262,7 +263,7 @@ void Menu::flightsPerAirport(Network network, Airport* airport) {
     cout << "╒═════════════════════════════════════════════╕\n"
             "│             Flights per Airport             │\n"
             "╞═════════════════════════════════════════════╡\n"
-            "│ " <<airport->getIATA()<<" has currently "<< airport->getFlights().size()<<" outgoing flights      │\n"
+            "│ " <<airport->getIATA()<<" has currently "<< setw(3)<<left<<airport->getFlights().size()<<" outgoing flights      │\n"
             "│                                             │\n"
             "│ > Back [0]                       > Quit [q] │\n"
             "╘═════════════════════════════════════════════╛\n"
@@ -289,7 +290,7 @@ void Menu::availableCountriesForAnAirport(Network network, Airport *airport) {
             "│             Available destinations          │\n"
             "╞═════════════════════════════════════════════╡\n"
             "│ " <<airport->getIATA()<<" has available flights to:               │\n"
-            "│ "<< network.numberOfCountriesAnAirportFliesTo(airport->getIATA()) <<" countries                                │\n"
+            "│ "<< setw(3)<<left<<network.numberOfCountriesAnAirportFliesTo(airport->getIATA()) <<" countries                               │\n"
             "│                                             │\n"
             "│ > Back [0]                       > Quit [q] │\n"
             "╘═════════════════════════════════════════════╛\n"
@@ -315,17 +316,17 @@ void Menu::availableDestinations(Network network, Airport *airport) {
     int cities, airports, countries;
     network.getDestNumFrom(airport->getIATA(),airports,cities,countries);
 
-    cout << "╒═════════════════════════════════════════════╕\n"
-            "│             Available destinations          │\n"
-            "╞═════════════════════════════════════════════╡\n"
-            "│ " <<airport->getIATA()<<" has available flights to:               │\n"
-            "│ "<<cities<<" cities                                 │\n"
-            "│ "<<countries<<" countries                               │\n"
-            "│ "<<airports<<"  airports                              │\n"
-            "│                                             │\n"
-            "│ > Back [0]                       > Quit [q] │\n"
-            "╘═════════════════════════════════════════════╛\n"
-            "                                               \n";
+    cout <<std::setw(12)<< "╒═════════════════════════════════════════════╕\n"
+            <<std::setw(12)<<"│             Available destinations          │\n"
+            <<std::setw(12)<<"╞═════════════════════════════════════════════╡\n"
+            <<"│ " <<setw(3)<<airport->getIATA()<<setw(7)<<" has available flights to:               │\n"
+            <<std::setw(3)<<"│ "<<setw(4)<<cities<<setw(6)<<" cities                                 │\n"
+            <<std::setw(3)<<"│ "<<setw(4)<<countries<<setw(6)<<" countries                              │\n"
+            <<std::setw(3)<<"│ "<<setw(4)<<airports<<setw(6)<<" airports                               │\n"
+            <<std::setw(12)<<"│                                             │\n"
+            <<std::setw(12)<<"│ > Back [0]                       > Quit [q] │\n"
+            <<std::setw(12)<<"╘═════════════════════════════════════════════╛\n"
+            <<std::setw(12)<<"                                               \n";
     string cmd;
     getline(cin, cmd);
 
@@ -368,19 +369,17 @@ void Menu::reachableDestinationsWithXStops(Network network, Airport *airport, in
 
     network.getDestNumFromAtDist(airport->getIATA(), stops, airports,cities,countries);
 
-    cout << "╒═════════════════════════════════════════════╕\n"
-            "│             Available destinations          │\n"
-            "╞═════════════════════════════════════════════╡\n"
-            "│ Given a maximum of " << stops << " stops:                 │\n"
-            "│ " <<airport->getIATA()<<" has available flights to:               │\n"
-            "│                                             │\n"
-            "│ "<<cities<<" cities                                 │\n"
-            "│ "<<countries<<" countries                               │\n"
-            "│ "<<airports<<"  airports                              │\n"
-            "│                                             │\n"
-            "│ > Back [0]                       > Quit [q] │\n"
-            "╘═════════════════════════════════════════════╛\n"
-            "                                               \n";
+    cout <<std::setw(12)<< "╒═════════════════════════════════════════════╕\n"
+         <<std::setw(12)<<"│             Available destinations          │\n"
+         <<std::setw(12)<<"╞═════════════════════════════════════════════╡\n"
+         <<"│ " <<setw(3)<<airport->getIATA()<<setw(7)<<" has available flights to:               │\n"
+         <<std::setw(3)<<"│ "<<setw(4)<<cities<<setw(6)<<" cities                                 │\n"
+         <<std::setw(3)<<"│ "<<setw(4)<<countries<<setw(6)<<" countries                              │\n"
+         <<std::setw(3)<<"│ "<<setw(4)<<airports<<setw(6)<<" airports                               │\n"
+         <<std::setw(12)<<"│                                             │\n"
+         <<std::setw(12)<<"│ > Back [0]                       > Quit [q] │\n"
+         <<std::setw(12)<<"╘═════════════════════════════════════════════╛\n"
+         <<std::setw(12)<<"                                               \n";
     string cmd;
     getline(cin, cmd);
 
@@ -427,10 +426,10 @@ void Menu::topKAirport(Network network, int k) {
             "│                Top k airport                │\n"
             "╞═════════════════════════════════════════════╡\n"
             "│ Here's the top k airport with the greatest  │\n"
-            "│ number of flights, with k = "<< k <<":              │\n"
+            "│ number of flights, with k ="<< setw(3)<<left<<k <<":            │\n"
             "│                                             │\n"
-            "│  Airport: "<< kAirport->getIATA() << "                               │\n"
-            "│  Number of flights: "<<kAirport->getTrafic() <<"                    │\n"
+            "│  Airport: "<< setw(3)<<kAirport->getIATA() << "                               │\n"
+            "│  Number of flights:"<<setw(4)<<left<<kAirport->getTrafic() <<"                     │\n"
             "│                                             │\n"
             "│ > Back [0]                       > Quit [q] │\n"
             "╘═════════════════════════════════════════════╛\n"
@@ -454,7 +453,6 @@ void Menu::topKAirport(Network network, int k) {
 
 void Menu::essentialAirports(Network network) {
     std::unordered_set<Airport*> airportList = network.articulationAirports();
-    int counter = 0;
 
     cout << "╒═════════════════════════════════════════════╕\n"
             "│              Essential Airports             │\n"
@@ -463,12 +461,11 @@ void Menu::essentialAirports(Network network) {
             "│                                             │\n";
 
     for(auto airport: airportList) {
-        cout <<"| "<<airport->getName() <<"                   │\n";
-        counter++;
+        cout <<"│ "<<setw(44)<<std::left <<airport->getName()<<"│\n";
     }
 
     cout << "│                                             │\n"
-            "│ Number of essential airports: "<< counter << "           │\n"
+            "│ Number of essential airports: "<< setw(6)<<left<<airportList.size() << "        │\n"
             "│                                             │\n"
             "│ > Back [0]                       > Quit [q] │\n"
             "╘═════════════════════════════════════════════╛\n"
@@ -576,7 +573,7 @@ void Menu::flightsPerAirline(Network network, std::string airlineName) {
     cout << "╒═════════════════════════════════════════════╕\n"
             "│             Flights per Airline             │\n"
             "╞═════════════════════════════════════════════╡\n"
-            "│ "<<airlineName<<" has currently "<< network.getFligthsNumPerAirline(airlineName)<<" flights               │\n"
+            "│ "<<airlineName<<" has currently "<< setw(3)<<left<<network.getFligthsNumPerAirline(airlineName)<<" flights               │\n"
             "│                                             │\n"
             "│ > Back [0]                       > Quit [q] │\n"
             "╘═════════════════════════════════════════════╛\n"
@@ -666,7 +663,7 @@ void Menu::flightsPerCity(Network network, std::string cityName, std::string cou
     cout << "╒═════════════════════════════════════════════╕\n"
             "│             Flights per City                │\n"
             "╞═════════════════════════════════════════════╡\n"
-            "│ The referred city has currently " << network.getFligthsNumPerCity(cityName,countryName) <<" flights │\n"
+            "│ The referred city has currently " << setw(4)<<left<<network.getFligthsNumPerCity(cityName,countryName) <<"flights │\n"
             "│                                             │\n"
             "│ > Back [0]                       > Quit [q] │\n"
             "╘═════════════════════════════════════════════╛\n"
@@ -693,7 +690,7 @@ void Menu::availableCountriesForACity(Network network, std::string cityName, std
             "│             Flights per City                │\n"
             "╞═════════════════════════════════════════════╡\n"
             "│ The referred city has currently flights to  │\n"
-            "│ " << network.numberOfCountriesACityFliesTo(cityName, countryName) << " different countries                      │\n"
+            "│        " << setw(3)<<left<<network.numberOfCountriesACityFliesTo(cityName, countryName) << " different countries              │\n"
             "│                                             │\n"
             "│ > Back [0]                       > Quit [q] │\n"
             "╘═════════════════════════════════════════════╛\n"
@@ -721,14 +718,14 @@ void Menu::flightTripWithMostStops(Network network) {
 
 
     cout << "╒═════════════════════════════════════════════╕\n"
-            "│       Flight trip(s) with the most stops    │\n"
+            "│     Flight trip(s) with the most stops      │\n"
             "╞═════════════════════════════════════════════╡\n"
-            "│ Max number of stops: "<< stops << "                     │\n";
+            "│ Max number of stops: "<<setw(3)<<left <<stops << "                    │\n";
 
     for(auto airportsPair: airportsSourceAndDest) {
        cout << "│                                             │\n";
-        cout <<"| Source:"<<airportsPair.first->getName() <<"                   │\n";
-        cout <<"| Dest:"<<airportsPair.second->getName() <<"                    │\n";
+        cout <<"| Source: "<<setw(36)<<std::left<<airportsPair.first->getName() <<"│\n";
+        cout <<"| Dest: "<<setw(38)<<std::left<<airportsPair.second->getName() <<"│\n";
     }
 
     cout << "│                                             │\n"

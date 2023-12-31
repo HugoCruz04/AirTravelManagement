@@ -837,7 +837,7 @@ void Menu::insertSourceAirportNameOrCode(Network network) {
             "╞═════════════════════════════════════════════╡\n"
             "│   > Type the airport's Name or Code         │\n"
             "│                                             │\n"
-            "│          [name] (e.g: Lisbon )              │\n"
+            "│          [name] (e.g: Lisboa )              │\n"
             "│          [code] (e.g: LIS )                 │\n"
             "│                                             │\n"
             "╘═════════════════════════════════════════════╛\n"
@@ -1028,8 +1028,8 @@ void Menu::insertDestAirportNameOrCode(Network network, std::vector<Airport *> s
             "╞═════════════════════════════════════════════╡\n"
             "│   > Type the airport's Name or Code         │\n"
             "│                                             │\n"
-            "│          [name] (e.g: Lisbon )              │\n"
-            "│          [code] (e.g: LIS )                 │\n"
+            "│          [name] (e.g: Thule Air Base )      │\n"
+            "│          [code] (e.g: THU )                 │\n"
             "│                                             │\n"
             "╘═════════════════════════════════════════════╛\n"
             "                                               \n";
@@ -1059,13 +1059,13 @@ void Menu::insertDestAirportNameOrCode(Network network, std::vector<Airport *> s
 
         if(cmd=="r"){
             nextPage();
-            insertSourceAirportNameOrCode(network);
+            insertDestAirportNameOrCode(network, sourceAirportList);
         }
 
     }
 
     std::vector<Airport*> destAirportList;
-    sourceAirportList.push_back(airport);
+    destAirportList.push_back(airport);
 
     nextPage();
     createBestFlightOption(network, sourceAirportList, destAirportList);
@@ -1077,7 +1077,7 @@ void Menu::insertDestAirportCityAndCountry(Network network, std::vector<Airport 
             "╞═════════════════════════════════════════════╡\n"
             "│    > Type the city and its country          │\n"
             "│                                             │\n"
-            "│           (e.g: Lisbon,Portugal)            │\n"
+            "│           (e.g: Thule,Greenland)            │\n"
             "│                                             │\n"
             "╘═════════════════════════════════════════════╛\n"
             "                                               \n";
@@ -1124,7 +1124,7 @@ void Menu::insertDestAirportCoordinates(Network network, std::vector<Airport *> 
             "│    > Type the Latitude and Longitude        │\n"
             "│                                             │\n"
             "│            [Format: LAT,LONG]               │\n"
-            "│          (e.g  49.012779,2.550000)          │\n"
+            "│          (e.g  76.531203,-68.703161)        │\n"
             "│                                             │\n"
             "╘═════════════════════════════════════════════╛\n"
             "                                               \n";
@@ -1177,9 +1177,42 @@ void Menu::createBestFlightOption(Network network, std::vector<Airport *> source
             "╞═════════════════════════════════════════════╡\n"
             "│ The best flight options between the given   │\n"
             "│ locations is:                               │\n"
-            "│                                             │\n";
+            ;
 
-    cout << "│  TO BE IMPLEMENTED                          │\n";
+    int i = 1;
+
+    for(std::vector<Airport *> trip : shortestPathList){
+
+        cout << "│                                             │\n"
+                "│ Trip option # "<<i<<":                            │\n";
+
+        int j = 0;
+        int size = trip.size();
+
+        for(Airport* airport : trip){
+           if(j == 0){
+               cout << "│   Starting at: " << airport->getIATA() << "                          │\n"
+                       "│                                             │\n";
+
+           }
+
+           else if(j == size - 1){
+               cout << "│                                             │\n"
+                       "│   Arriving at: " << airport->getIATA() << "                          │\n";
+
+           }
+
+           else{
+               cout << "│   Stopping at: " << airport->getIATA() << "                          │\n";
+           }
+
+
+           j++;
+        }
+
+        cout << "│                                             │\n";
+        i++;
+    }
 
     cout << "│                                             │\n"
             "│ > Back [0]                       > Quit [q] │\n"

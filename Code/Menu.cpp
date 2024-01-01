@@ -781,7 +781,7 @@ void Menu::bestFlightOption(Network network) {
             break;
         case 2:
             nextPage();
-            insertCountryAndCityName(network,1);
+            //todo
             break;
     }
 }

@@ -736,16 +736,15 @@ void Menu::flightTripWithMostStops(Network network) {
     string cmd;
     getline(cin, cmd);
 
+    while(cmd !="q" && cmd != "0"){
+        cout<<"ERROR: Choose a valid option \n";
+        getline(cin, cmd);
+    }
     if (cmd=="q") quit();
 
     if(cmd == "0"){
         nextPage();
-        flightStatistics(network);
-    }
-
-    while(cmd !="q" && cmd != "0"){
-        cout<<"ERROR: Choose a valid option \n";
-        getline(cin, cmd);
+        statistics(network);
     }
 }
 
@@ -774,7 +773,7 @@ void Menu::bestFlightOption(Network network) {
     switch (operation) {
         case 0:
             nextPage();
-            statistics(network);
+            run();
             break;
         case 1:
             nextPage();
@@ -813,7 +812,7 @@ void Menu::bestFlightOptionWithoutFiltersSource(Network network) {
     switch (operation) {
         case 0:
             nextPage();
-            statistics(network);
+            bestFlightOption(network);
             break;
         case 1:
             nextPage();
@@ -1184,7 +1183,7 @@ void Menu::createBestFlightOption(Network network, std::vector<Airport *> source
     for(std::vector<Airport *> trip : shortestPathList){
 
         cout << "│                                             │\n"
-                "│ Trip option # "<<i<<":                            │\n";
+                "│ Trip option # "<<setw(2)<<left<<i<<":                           │\n";
 
         int j = 0;
         int size = trip.size();
@@ -1230,7 +1229,7 @@ void Menu::createBestFlightOption(Network network, std::vector<Airport *> source
 
     if (stoi(cmd) == 0){
         nextPage();
-        bestFlightOptionWithoutFiltersDest(network, sourceAirportList);
+        bestFlightOption(network);
     }
 
 }

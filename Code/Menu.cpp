@@ -1241,9 +1241,8 @@ void Menu::bestFlightOptionWithFilters(Network network) {
     cout << "╒═════════════════════════════════════════════╕\n"
             "│         Best flight option (w/ filters)     │\n"
             "╞═════════════════════════════════════════════╡\n"
-            "│ Choose a filter:                            │\n"
+            "│ Available filters:                          │\n"
             "│ > User provided airlines                [1] │\n"
-            "│ > Minimum different airlines            [2] │\n"
             "│                                             │\n"
             "│ > Back [0]                       > Quit [q] │\n"
             "╘═════════════════════════════════════════════╛\n"
@@ -1269,11 +1268,6 @@ void Menu::bestFlightOptionWithFilters(Network network) {
             nextPage();
             insertAirlineList(network,airlines);
             break;
-        case 2:
-            nextPage();
-            //todo
-            break;
-
     }
 }
 
@@ -1485,11 +1479,11 @@ void Menu::sourceCriteria(Network network, Network newNetwork, std::vector<Airli
             break;
         case 2:
             nextPage();
-            //insertSourceAirportCityAndCountry(network);
+            insertSourceAirportCityAndCountry(network,newNetwork, airlines);
             break;
         case 3:
             nextPage();
-            //insertSourceAirportCoordinates(network);
+            insertSourceAirportCoordinates(network,newNetwork, airlines);
             break;
     }
 

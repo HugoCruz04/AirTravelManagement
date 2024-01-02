@@ -40,12 +40,12 @@ public:
     // 4
     void bestFlightOption(Network network);
 
-    void bestFlightOptionWithoutFiltersSource(Network network);
+    void sourceCriteria(Network network);
     void insertSourceAirportNameOrCode(Network network);
     void insertSourceAirportCityAndCountry(Network network);
     void insertSourceAirportCoordinates(Network network);
 
-    void bestFlightOptionWithoutFiltersDest(Network network, std::vector<Airport*> sourceAirportList);
+    void destCriteria(Network network, std::vector<Airport*> sourceAirportList);
     void insertDestAirportNameOrCode(Network network,std::vector<Airport*> sourceAirportList);
     void insertDestAirportCityAndCountry(Network network,std::vector<Airport*> sourceAirportList);
     void insertDestAirportCoordinates(Network network,std::vector<Airport*> sourceAirportList);
@@ -55,6 +55,20 @@ public:
     //--------------------------------------------------------------------------
     // 5
     void bestFlightOptionWithFilters(Network network);
+    void insertAirlineList(Network network, std::vector<Airline> airlines);
+    void checkAddedAirlines(Network network, std::vector<Airline> airlines);
+    void removeAirline(Network network,std::vector<Airline> airlines);
 
+    void sourceCriteria(Network network, Network newNetwork, std::vector<Airline> airlines);
+    void insertSourceAirportNameOrCode(Network network,Network newNetwork, std::vector<Airline> airlines);
+    void insertSourceAirportCityAndCountry(Network network,Network newNetwork, std::vector<Airline> airlines );
+    void insertSourceAirportCoordinates(Network network, Network newNetwork,std::vector<Airline> airlines);
+
+    void destCriteria(Network network, Network newNetwork,std::vector<Airline> airlines, std::vector<Airport*> sourceAirportList);
+    void insertDestAirportNameOrCode(Network network, Network newNetwork,std::vector<Airline> airlines,std::vector<Airport*> sourceAirportList);
+    void insertDestAirportCityAndCountry(Network network, Network newNetwork,std::vector<Airline> airlines,std::vector<Airport*> sourceAirportList);
+    void insertDestAirportCoordinates(Network network, Network newNetwork,std::vector<Airline> airlines,std::vector<Airport*> sourceAirportList);
+
+    void createBestFlightOption(Network network,Network newNetwork,std::vector<Airline> airlines,std::vector<Airport*> sourceAirportList, std::vector<Airport*> destAirportList);
 
 };

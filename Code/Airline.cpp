@@ -11,6 +11,10 @@ Airline::Airline(std::string code, std::string name, std::string callsign, std::
     this->country=country;
 }
 
+Airline::Airline(std::string code){
+    this->code=code;
+}
+
 std::string Airline::getName() {
     return name;
 }

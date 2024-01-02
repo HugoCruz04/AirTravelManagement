@@ -525,14 +525,14 @@ void Menu::flightStatistics(Network network) {
             break;
         case 2:
             nextPage();
-            insertCountryAndCityName(network,1);
+            //todo;
             break;
     }
 }
 
 void Menu::insertAirlineName(Network network) {
     cout << "╒═════════════════════════════════════════════╕\n"
-            "│              Flights per Airline            │\n"
+            "│                    Airline                  │\n"
             "╞═════════════════════════════════════════════╡\n"
             "│          > Type the Airline name            │\n"
             "│                                             │\n"
@@ -598,7 +598,7 @@ void Menu::flightsPerAirline(Network network, std::string airlineName) {
 
 void Menu::insertCountryAndCityName(Network network, int option) {
     cout << "╒═════════════════════════════════════════════╕\n"
-            "│              Flights per City               │\n"
+            "│                   City                      │\n"
             "╞═════════════════════════════════════════════╡\n"
             "│    > Type the city and its country          │\n"
             "│                                             │\n"
@@ -777,16 +777,16 @@ void Menu::bestFlightOption(Network network) {
             break;
         case 1:
             nextPage();
-            bestFlightOptionWithoutFiltersSource(network);
+            sourceCriteria(network);
             break;
         case 2:
             nextPage();
-            //todo
+            bestFlightOptionWithFilters(network);
             break;
     }
 }
 
-void Menu::bestFlightOptionWithoutFiltersSource(Network network) {
+void Menu::sourceCriteria(Network network) {
     cout << "╒═════════════════════════════════════════════╕\n"
             "│                Source criteria              │\n"
             "╞═════════════════════════════════════════════╡\n"
@@ -861,7 +861,7 @@ void Menu::insertSourceAirportNameOrCode(Network network) {
 
         if(cmd=="0"){
             nextPage();
-            bestFlightOptionWithoutFiltersSource(network);
+            sourceCriteria(network);
 
         }
 
@@ -876,7 +876,7 @@ void Menu::insertSourceAirportNameOrCode(Network network) {
     sourceAirportList.push_back(airport);
 
     nextPage();
-    bestFlightOptionWithoutFiltersDest(network, sourceAirportList);
+    destCriteria(network, sourceAirportList);
 
 }
 void Menu::insertSourceAirportCityAndCountry(Network network) {
@@ -911,17 +911,18 @@ void Menu::insertSourceAirportCityAndCountry(Network network) {
 
         if(cmd=="0"){
             nextPage();
-            bestFlightOptionWithoutFiltersSource(network);
+            sourceCriteria(network);
         }
 
         if(cmd=="r"){
             nextPage();
-            insertSourceAirportNameOrCode(network);
+            insertSourceAirportCityAndCountry(network);
         }
     }
     vector <Airport*> sourceAirportList = network.findAirportsInCity(city,country);
 
-    bestFlightOptionWithoutFiltersDest(network, sourceAirportList);
+    nextPage();
+    destCriteria(network, sourceAirportList);
 
 }
 
@@ -963,21 +964,22 @@ void Menu::insertSourceAirportCoordinates(Network network) {
 
         if(cmd=="0"){
             nextPage();
-            bestFlightOptionWithoutFiltersSource(network);
+            sourceCriteria(network);
         }
 
         if(cmd=="r"){
             nextPage();
-            insertSourceAirportNameOrCode(network);
+            insertSourceAirportCoordinates(network);
         }
 
     }
 
-    bestFlightOptionWithoutFiltersDest(network, sourceAirportList);
+    nextPage();
+    destCriteria(network, sourceAirportList);
 
 }
 
-void Menu::bestFlightOptionWithoutFiltersDest(Network network, std::vector<Airport*> sourceAirportList) {
+void Menu::destCriteria(Network network, std::vector<Airport*> sourceAirportList) {
     cout << "╒═════════════════════════════════════════════╕\n"
             "│                Dest criteria                │\n"
             "╞═════════════════════════════════════════════╡\n"
@@ -1003,7 +1005,7 @@ void Menu::bestFlightOptionWithoutFiltersDest(Network network, std::vector<Airpo
     switch (operation) {
         case 0:
             nextPage();
-            bestFlightOptionWithoutFiltersSource(network);
+            sourceCriteria(network);
             break;
         case 1:
             nextPage();
@@ -1052,7 +1054,7 @@ void Menu::insertDestAirportNameOrCode(Network network, std::vector<Airport *> s
 
         if(cmd=="0"){
             nextPage();
-            bestFlightOptionWithoutFiltersSource(network);
+            destCriteria(network, sourceAirportList);
 
         }
 
@@ -1102,12 +1104,12 @@ void Menu::insertDestAirportCityAndCountry(Network network, std::vector<Airport 
 
         if(cmd=="0"){
             nextPage();
-            bestFlightOptionWithoutFiltersSource(network);
+            destCriteria(network, sourceAirportList);
         }
 
         if(cmd=="r"){
             nextPage();
-            insertSourceAirportNameOrCode(network);
+            insertDestAirportCityAndCountry(network, sourceAirportList);
         }
     }
     vector <Airport*> destAirportList = network.findAirportsInCity(city,country);
@@ -1154,12 +1156,12 @@ void Menu::insertDestAirportCoordinates(Network network, std::vector<Airport *> 
 
         if(cmd=="0"){
             nextPage();
-            bestFlightOptionWithoutFiltersSource(network);
+            destCriteria(network, sourceAirportList);
         }
 
         if(cmd=="r"){
             nextPage();
-            insertSourceAirportNameOrCode(network);
+            insertDestAirportCoordinates(network,sourceAirportList);
         }
 
     }
@@ -1233,6 +1235,677 @@ void Menu::createBestFlightOption(Network network, std::vector<Airport *> source
     }
 
 }
+
+
+void Menu::bestFlightOptionWithFilters(Network network) {
+    cout << "╒═════════════════════════════════════════════╕\n"
+            "│         Best flight option (w/ filters)     │\n"
+            "╞═════════════════════════════════════════════╡\n"
+            "│ Choose a filter:                            │\n"
+            "│ > User provided airlines                [1] │\n"
+            "│ > Minimum different airlines            [2] │\n"
+            "│                                             │\n"
+            "│ > Back [0]                       > Quit [q] │\n"
+            "╘═════════════════════════════════════════════╛\n"
+            "                                               \n";
+    string cmd;
+    getline(cin, cmd);
+    if (cmd=="q") quit();
+
+    while(cmd !="q" && cmd != "0" && cmd!="1" && cmd!="2"){
+        cout<<"ERROR: Choose a valid option \n";
+        getline(cin, cmd);
+    }
+
+    int operation = stoi(cmd);
+    std::vector<Airline> airlines;
+
+    switch (operation) {
+        case 0:
+            nextPage();
+            bestFlightOption(network);
+            break;
+        case 1:
+            nextPage();
+            insertAirlineList(network,airlines);
+            break;
+        case 2:
+            nextPage();
+            //todo
+            break;
+
+    }
+}
+
+void Menu::insertAirlineList(Network network, std::vector<Airline> airlines) {
+    cout << "╒═════════════════════════════════════════════╕\n"
+            "│                 Add Airline                 │\n"
+            "╞═════════════════════════════════════════════╡\n"
+            "│     > Type the airline you want to add      │\n"
+            "│                                             │\n"
+            "╘═════════════════════════════════════════════╛\n"
+            "                                               \n";
+    string cmd;
+
+    getline(cin, cmd);
+    string airlineCode = cmd;
+
+
+    if(network.getFligthsNumPerAirline(airlineCode) == 0){
+        cout<<"ERROR: The provided airline has no flights or was not found\n"
+              "\n> Back [0]                       > Retry [r] \n";
+        getline(cin, cmd);
+
+        while(cmd!="0" && cmd!="r"){
+            cout<<"ERROR: Choose a valid option! \n\n> Back [0]                       > Retry [r] \n";
+            getline(cin, cmd);
+        }
+
+        if(cmd=="0"){
+            nextPage();
+            bestFlightOptionWithFilters(network);
+        }
+
+        if(cmd=="r"){
+            nextPage();
+            insertAirlineList(network,airlines);
+        }
+
+    }
+
+    for(auto airline : airlines){
+        if( airline.getcode() == airlineCode){
+            cout<<"ERROR: The provided airline has already been added\n"
+                  "\n> Back [0]                       > Retry [r] \n";
+            getline(cin, cmd);
+
+            while(cmd!="0" && cmd!="r"){
+                cout<<"ERROR: Choose a valid option! \n\n> Back [0]                       > Retry [r] \n";
+                getline(cin, cmd);
+            }
+
+            if(cmd=="0"){
+                nextPage();
+                bestFlightOptionWithFilters(network);
+            }
+
+            if(cmd=="r"){
+                nextPage();
+                insertAirlineList(network,airlines);
+            }
+
+
+        }
+
+
+    }
+
+
+    Airline newAirline = Airline(cmd);
+    airlines.push_back(newAirline);
+
+    nextPage();
+    checkAddedAirlines(network,airlines);
+
+
+}
+
+void Menu::checkAddedAirlines(Network network, std::vector<Airline> airlines) {
+    cout << "╒═════════════════════════════════════════════╕\n"
+            "│               Added Airlines                │\n"
+            "╞═════════════════════════════════════════════╡\n"
+            "│ These are the currently selected airlines:  │\n";
+
+    for( auto airline : airlines){
+        cout <<  "│   ->"<<airline.getcode()<<"                                     │\n";
+
+    }
+
+    cout << "│                                             │\n"
+            "│ > Add airline                           [1] │\n"
+            "│ > Remove airline                        [2] │\n"
+            "│                                             │\n"
+            "│ Back[0]                             Next[9] │\n"
+            "╘═════════════════════════════════════════════╛\n"
+            "                                               \n";
+
+    string cmd;
+    getline(cin, cmd);
+    if (cmd=="q") quit();
+
+    while(cmd !="q" && cmd != "0" && cmd!="1" && cmd!="2" && cmd!="9"){
+        cout<<"ERROR: Choose a valid option \n";
+        getline(cin, cmd);
+    }
+
+    int operation = stoi(cmd);
+
+    switch (operation) {
+        case 0:
+            nextPage();
+            bestFlightOptionWithFilters(network);
+            break;
+        case 1:
+            nextPage();
+            insertAirlineList(network,airlines);
+            break;
+        case 2:
+            nextPage();
+            removeAirline(network,airlines);
+            break;
+        case 9:
+            nextPage();
+            Network newNetwork = network.filterByAirlines(airlines);
+            sourceCriteria(network,newNetwork,airlines);
+            break;
+    }
+
+}
+
+void Menu::removeAirline(Network network, std::vector<Airline> airlines) {
+    cout << "╒═════════════════════════════════════════════╕\n"
+            "│                 Remove Airline              │\n"
+            "╞═════════════════════════════════════════════╡\n"
+            "│  > Type the airline you want to remove      │\n"
+            "│                                             │\n"
+            "╘═════════════════════════════════════════════╛\n"
+            "                                               \n";
+    string cmd;
+
+    getline(cin, cmd);
+    string airlineCode = cmd;
+
+    if(network.getFligthsNumPerAirline(airlineCode) == 0){ //
+        cout<<"ERROR: The provided airline has no flights or was not found\n\n> Back [0]                       > Retry [r] \n";
+        getline(cin, cmd);
+
+        while(cmd!="0" && cmd!="r"){
+            cout<<"ERROR: Choose a valid option! \n\n> Back [0]                       > Retry [r] \n";
+            getline(cin, cmd);
+        }
+
+        if(cmd=="0"){
+            nextPage();
+            bestFlightOptionWithFilters(network);
+        }
+
+        if(cmd=="r"){
+            nextPage();
+            insertAirlineList(network,airlines);
+        }
+
+    }
+
+    auto it = airlines.begin();
+
+    while (it != airlines.end()){
+        if(it->getcode() == airlineCode){
+            it = airlines.erase(it);
+            break;
+        }
+        it++;
+    }
+
+    nextPage();
+    checkAddedAirlines(network,airlines);
+
+}
+
+void Menu::sourceCriteria(Network network, Network newNetwork, std::vector<Airline> airlines) {
+    cout << "╒═════════════════════════════════════════════╕\n"
+            "│                Source criteria              │\n"
+            "╞═════════════════════════════════════════════╡\n"
+            "│ Choose a criteria for source airport:       │\n"
+            "│ > Airport code/name                     [1] │\n"
+            "│ > City name                             [2] │\n"
+            "│ > Geographical coordinates              [3] │\n"
+            "│                                             │\n"
+            "│ > Back [0]                       > Quit [q] │\n"
+            "╘═════════════════════════════════════════════╛\n"
+            "                                               \n";
+    string cmd;
+    getline(cin, cmd);
+    if (cmd=="q") quit();
+
+    while(cmd !="q" && cmd != "0" && cmd!="1" && cmd!="2" && cmd!="3"){
+        cout<<"ERROR: Choose a valid option \n";
+        getline(cin, cmd);
+    }
+
+    int operation = stoi(cmd);
+
+    switch (operation) {
+        case 0:
+            nextPage();
+            checkAddedAirlines(network, airlines);
+            break;
+        case 1:
+            nextPage();
+            insertSourceAirportNameOrCode(network, newNetwork, airlines);
+            break;
+        case 2:
+            nextPage();
+            //insertSourceAirportCityAndCountry(network);
+            break;
+        case 3:
+            nextPage();
+            //insertSourceAirportCoordinates(network);
+            break;
+    }
+
+}
+
+
+void Menu::insertSourceAirportNameOrCode(Network network, Network newNetwork, std::vector<Airline> airlines) {
+    cout << "╒═════════════════════════════════════════════╕\n"
+            "│         Source airport's name or code       │\n"
+            "╞═════════════════════════════════════════════╡\n"
+            "│   > Type the airport's Name or Code         │\n"
+            "│                                             │\n"
+            "│          [name] (e.g: Lisboa )              │\n"
+            "│          [code] (e.g: LIS )                 │\n"
+            "│                                             │\n"
+            "╘═════════════════════════════════════════════╛\n"
+            "                                               \n";
+    string cmd;
+
+    getline(cin, cmd);
+    Airport* airport = newNetwork.findAirport(cmd);
+
+    if(airport == nullptr){
+        airport = newNetwork.findAirportByName(cmd);
+    }
+
+    if(airport == nullptr){
+        cout<<"ERROR: Airport not found\n\n> Back [0]                       > Retry [r] \n";
+        getline(cin, cmd);
+
+        while(cmd!="0" && cmd!="r"){
+            cout<<"ERROR: Choose a valid option! \n\n> Back [0]                       > Retry [r] \n";
+            getline(cin, cmd);
+        }
+
+        if(cmd=="0"){
+            nextPage();
+            sourceCriteria(network,newNetwork,airlines);
+
+        }
+
+        if(cmd=="r"){
+            nextPage();
+            insertSourceAirportNameOrCode(network,newNetwork, airlines);
+        }
+
+    }
+
+    std::vector<Airport*> sourceAirportList;
+    sourceAirportList.push_back(airport);
+
+    nextPage();
+    destCriteria(network, newNetwork, airlines, sourceAirportList);
+
+}
+
+void Menu::insertSourceAirportCityAndCountry(Network network, Network newNetwork, std::vector<Airline> airlines) {
+    cout << "╒═════════════════════════════════════════════╕\n"
+            "│                    City                     │\n"
+            "╞═════════════════════════════════════════════╡\n"
+            "│    > Type the city and its country          │\n"
+            "│                                             │\n"
+            "│           (e.g: Lisbon,Portugal)            │\n"
+            "│                                             │\n"
+            "╘═════════════════════════════════════════════╛\n"
+            "                                               \n";
+    string cmd;
+
+    getline(cin, cmd);
+
+    std::istringstream iss (cmd);
+
+    string city, country;
+
+    std::getline(iss, city, ',');
+    std::getline(iss, country);
+
+    if(newNetwork.getFligthsNumPerCity(city,country) == 0){
+        cout<<"ERROR: The provided city has no flights or was not found\n\n> Back [0]                       > Retry [r] \n";
+        getline(cin, cmd);
+
+        while(cmd!="0" && cmd!="r"){
+            cout<<"ERROR: Choose a valid option! \n\n> Back [0]                       > Retry [r] \n";
+            getline(cin, cmd);
+        }
+
+        if(cmd=="0"){
+            nextPage();
+            sourceCriteria(network, newNetwork, airlines);
+        }
+
+        if(cmd=="r"){
+            nextPage();
+            insertSourceAirportCityAndCountry(network, newNetwork,airlines);
+        }
+    }
+    vector <Airport*> sourceAirportList = newNetwork.findAirportsInCity(city,country);
+
+    nextPage();
+    destCriteria(network, newNetwork, airlines, sourceAirportList);
+}
+
+void Menu::insertSourceAirportCoordinates(Network network, Network newNetwork, std::vector<Airline> airlines) {
+    cout << "╒═════════════════════════════════════════════╕\n"
+            "│           Geographical coordinates          │\n"
+            "╞═════════════════════════════════════════════╡\n"
+            "│    > Type the Latitude and Longitude        │\n"
+            "│                                             │\n"
+            "│            [Format: LAT,LONG]               │\n"
+            "│          (e.g  49.012779,2.550000)          │\n"
+            "│                                             │\n"
+            "╘═════════════════════════════════════════════╛\n"
+            "                                               \n";
+    string cmd;
+
+    getline(cin, cmd);
+
+    std::istringstream iss (cmd);
+
+    string latitudeStr, longitudeStr;
+
+    std::getline(iss, latitudeStr, ',');
+    std::getline(iss, longitudeStr);
+
+    float latitude = stof(latitudeStr);
+    float longitude = stof(longitudeStr);
+
+    std::vector<Airport*> sourceAirportList = newNetwork.findClosestAirports(latitude, longitude);
+
+    if(sourceAirportList.empty()){
+        cout<<"ERROR: The provided coordinates are invalid or no airport was found\n\n> Back [0]                       > Retry [r] \n";
+        getline(cin, cmd);
+
+        while(cmd!="0" && cmd!="r"){
+            cout<<"ERROR: Choose a valid option! \n\n> Back [0]                       > Retry [r] \n";
+            getline(cin, cmd);
+        }
+
+        if(cmd=="0"){
+            nextPage();
+            sourceCriteria(network, newNetwork, airlines);
+        }
+
+        if(cmd=="r"){
+            nextPage();
+            insertSourceAirportCoordinates(network, newNetwork, airlines);
+        }
+
+    }
+
+    nextPage();
+    destCriteria(network, newNetwork, airlines ,sourceAirportList);
+
+}
+
+
+
+void Menu::destCriteria(Network network, Network newNetwork, std::vector<Airline> airlines, std::vector<Airport *> sourceAirportList) {
+    cout << "╒═════════════════════════════════════════════╕\n"
+            "│                Dest criteria                │\n"
+            "╞═════════════════════════════════════════════╡\n"
+            "│ Choose a criteria for dest airport:         │\n"
+            "│ > Airport code/name                     [1] │\n"
+            "│ > City name                             [2] │\n"
+            "│ > Geographical coordinates              [3] │\n"
+            "│                                             │\n"
+            "│ > Back [0]                       > Quit [q] │\n"
+            "╘═════════════════════════════════════════════╛\n"
+            "                                               \n";
+    string cmd;
+    getline(cin, cmd);
+    if (cmd=="q") quit();
+
+    while(cmd !="q" && cmd != "0" && cmd!="1" && cmd!="2" && cmd!="3"){
+        cout<<"ERROR: Choose a valid option \n";
+        getline(cin, cmd);
+    }
+
+    int operation = stoi(cmd);
+
+    switch (operation) {
+        case 0:
+            nextPage();
+            sourceCriteria(network,newNetwork, airlines);
+            break;
+        case 1:
+            nextPage();
+            insertDestAirportNameOrCode(network,newNetwork, airlines ,sourceAirportList);
+            break;
+        case 2:
+            nextPage();
+            insertDestAirportCityAndCountry(network,newNetwork, airlines ,sourceAirportList);
+            break;
+        case 3:
+            nextPage();
+            insertDestAirportCoordinates(network,newNetwork, airlines ,sourceAirportList);
+            break;
+    }
+
+}
+
+void Menu::insertDestAirportNameOrCode(Network network, Network newNetwork, std::vector<Airline> airlines,std::vector<Airport *> sourceAirportList) {
+    cout << "╒═════════════════════════════════════════════╕\n"
+            "│          Dest airport's name or code        │\n"
+            "╞═════════════════════════════════════════════╡\n"
+            "│   > Type the airport's Name or Code         │\n"
+            "│                                             │\n"
+            "│          [name] (e.g: Thule Air Base )      │\n"
+            "│          [code] (e.g: THU )                 │\n"
+            "│                                             │\n"
+            "╘═════════════════════════════════════════════╛\n"
+            "                                               \n";
+    string cmd;
+
+    getline(cin, cmd);
+    Airport* airport = newNetwork.findAirport(cmd);
+
+    if(airport == nullptr){
+        airport = newNetwork.findAirportByName(cmd);
+    }
+
+    if(airport == nullptr){
+        cout<<"ERROR: Airport not found\n\n> Back [0]                       > Retry [r] \n";
+        getline(cin, cmd);
+
+        while(cmd!="0" && cmd!="r"){
+            cout<<"ERROR: Choose a valid option! \n\n> Back [0]                       > Retry [r] \n";
+            getline(cin, cmd);
+        }
+
+        if(cmd=="0"){
+            nextPage();
+            destCriteria(network, newNetwork, airlines, sourceAirportList);
+
+        }
+
+        if(cmd=="r"){
+            nextPage();
+            insertDestAirportNameOrCode(network, newNetwork, airlines, sourceAirportList);
+        }
+
+    }
+
+    std::vector<Airport*> destAirportList;
+    destAirportList.push_back(airport);
+
+    nextPage();
+    createBestFlightOption(network, newNetwork, airlines,sourceAirportList, destAirportList);
+}
+
+void Menu::insertDestAirportCityAndCountry(Network network, Network newNetwork, std::vector<Airline> airlines,std::vector<Airport *> sourceAirportList) {
+    cout << "╒═════════════════════════════════════════════╕\n"
+            "│                    City                     │\n"
+            "╞═════════════════════════════════════════════╡\n"
+            "│    > Type the city and its country          │\n"
+            "│                                             │\n"
+            "│           (e.g: Thule,Greenland)            │\n"
+            "│                                             │\n"
+            "╘═════════════════════════════════════════════╛\n"
+            "                                               \n";
+    string cmd;
+
+    getline(cin, cmd);
+
+    std::istringstream iss (cmd);
+
+    string city, country;
+
+    std::getline(iss, city, ',');
+    std::getline(iss, country);
+
+    if(newNetwork.getFligthsNumPerCity(city,country) == 0){
+        cout<<"ERROR: The provided city has no flights or was not found\n\n> Back [0]                       > Retry [r] \n";
+        getline(cin, cmd);
+
+        while(cmd!="0" && cmd!="r"){
+            cout<<"ERROR: Choose a valid option! \n\n> Back [0]                       > Retry [r] \n";
+            getline(cin, cmd);
+        }
+
+        if(cmd=="0"){
+            nextPage();
+            destCriteria(network, newNetwork, airlines, sourceAirportList);
+        }
+
+        if(cmd=="r"){
+            nextPage();
+            insertDestAirportCityAndCountry(network, newNetwork, airlines, sourceAirportList);
+        }
+    }
+    vector <Airport*> destAirportList = newNetwork.findAirportsInCity(city,country);
+
+    nextPage();
+    createBestFlightOption(network, newNetwork, airlines, sourceAirportList, destAirportList);
+}
+
+void Menu::insertDestAirportCoordinates(Network network, Network newNetwork, std::vector<Airline> airlines,std::vector<Airport *> sourceAirportList) {
+    cout << "╒═════════════════════════════════════════════╕\n"
+            "│           Geographical coordinates          │\n"
+            "╞═════════════════════════════════════════════╡\n"
+            "│    > Type the Latitude and Longitude        │\n"
+            "│                                             │\n"
+            "│            [Format: LAT,LONG]               │\n"
+            "│          (e.g  76.531203,-68.703161)        │\n"
+            "│                                             │\n"
+            "╘═════════════════════════════════════════════╛\n"
+            "                                               \n";
+    string cmd;
+
+    getline(cin, cmd);
+
+    std::istringstream iss (cmd);
+
+    string latitudeStr, longitudeStr;
+
+    std::getline(iss, latitudeStr, ',');
+    std::getline(iss, longitudeStr);
+
+    float latitude = stof(latitudeStr);
+    float longitude = stof(longitudeStr);
+
+    std::vector<Airport*> destAirportList = newNetwork.findClosestAirports(latitude, longitude);
+
+    if(sourceAirportList.empty()){
+        cout<<"ERROR: The provided coordinates are invalid or no airport was found\n\n> Back [0]                       > Retry [r] \n";
+        getline(cin, cmd);
+
+        while(cmd!="0" && cmd!="r"){
+            cout<<"ERROR: Choose a valid option! \n\n> Back [0]                       > Retry [r] \n";
+            getline(cin, cmd);
+        }
+
+        if(cmd=="0"){
+            nextPage();
+            destCriteria(network, newNetwork, airlines, sourceAirportList);
+        }
+
+        if(cmd=="r"){
+            nextPage();
+            insertDestAirportCoordinates(network, newNetwork, airlines,sourceAirportList);
+        }
+
+    }
+    nextPage();
+    createBestFlightOption(network, newNetwork, airlines, sourceAirportList, destAirportList);
+}
+
+void Menu::createBestFlightOption(Network network, Network newNetwork, std::vector<Airline> airlines,std::vector<Airport *> sourceAirportList, std::vector<Airport *> destAirportList) {
+    std::vector<std::vector<Airport *>> shortestPathList = newNetwork.shortestPathsAuxiliary(sourceAirportList,destAirportList);
+
+
+    cout << "╒═════════════════════════════════════════════╕\n"
+            "│             Best flight options             │\n"
+            "╞═════════════════════════════════════════════╡\n"
+            "│ The best flight options between the given   │\n"
+            "│ locations is:                               │\n"
+            ;
+
+    int i = 1;
+
+    for(std::vector<Airport *> trip : shortestPathList){
+
+        cout << "│                                             │\n"
+                "│ Trip option # "<<setw(2)<<left<<i<<":                           │\n";
+
+        int j = 0;
+        int size = trip.size();
+
+        for(Airport* airport : trip){
+            if(j == 0){
+                cout << "│   Starting at: " << airport->getIATA() << "                          │\n"
+                                                                     "│                                             │\n";
+
+            }
+
+            else if(j == size - 1){
+                cout << "│                                             │\n"
+                        "│   Arriving at: " << airport->getIATA() << "                          │\n";
+
+            }
+
+            else{
+                cout << "│   Stopping at: " << airport->getIATA() << "                          │\n";
+            }
+
+
+            j++;
+        }
+
+        cout << "│                                             │\n";
+        i++;
+    }
+
+    cout << "│                                             │\n"
+            "│ > Back [0]                       > Quit [q] │\n"
+            "╘═════════════════════════════════════════════╛\n"
+            "                                               \n";
+
+    string cmd;
+    getline(cin, cmd);
+    if (cmd=="q") quit();
+
+    while(cmd !="q" && cmd != "0" && cmd!="1" && cmd!="2"){
+        cout<<"ERROR: Choose a valid option \n";
+        getline(cin, cmd);
+    }
+
+    if (stoi(cmd) == 0){
+        nextPage();
+        checkAddedAirlines(network,airlines);
+    }
+
+}
+
+
+
 
 
 

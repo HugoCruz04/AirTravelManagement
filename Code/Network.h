@@ -15,6 +15,8 @@
 #ifndef PROJETO_2_NETWORK_H
 #define PROJETO_2_NETWORK_H
 
+
+
 /**
  * @brief Hash function for std::pair used in unordered_set.
  */
@@ -136,52 +138,112 @@ public:
      */
     int numberOfCountriesACityFliesTo(const std::string& City, const std::string& Country); //3.iv b)
 
+    /**
+     * @brief Method that uses DFS to insert countries, airports and cities in the unordered_sets
+     *
+     * @param v
+     * @param airports
+     * @param cities
+     * @param countries
+     */
     void dfsVisit(Airport* v,std::unordered_set<std::string> &airports, std::unordered_set<std::pair<std::string,std::string>, PairHash> &cities, std::unordered_set<std::string> &countries) const;
+    /**
+     * @brief Method that takes an Airport code and three integers and returns the number os cities, countries and airports in those integers using dfsVisit()
+     *
+     * @param IATA
+     * @param airports
+     * @param cities
+     * @param countries
+     */
     void getDestNumFrom(std::string IATA, int &airports, int &cities, int &countries);//3.v
 
+    /**
+     * @brief Method that takes an Airport code and three integers and returns the number os cities, countries and airports in those integers using a BFS
+     *
+     * @param IATA
+     * @param distance
+     * @param airports
+     * @param cities
+     * @param countries
+     */
     void getDestNumFromAtDist(std::string IATA, int distance,int &airports, int &cities, int &countries); //3.vi
 
-    int shortestPathNR(std::string start, std::string end);
-    std::unordered_set<std::pair< std::string, std::string>, PairHash> findDiameter();//extra... n é pedido
-
+    /**
+     * @brief Method that returns the max number of stops in the integer input and the pairs <Airport,Airport> that represent the source and destination in the input vector taking advantage of a BFS methos calculateStopsBFSAux()
+     *
+     * @param stops
+     * @param airports
+     */
     void getMaxStopsBetweenAirports(int & stops, std::vector <std::pair<Airport *, Airport *>> &airports);//3.vii
+
+    /**
+     * @brief Method that return the max number of stops possible using a BFS
+     *
+     * @param source
+     * @param aux
+     * @return
+     */
     int calculateStopsBFSAux(Airport* source, std::vector<std::pair<Airport*, Airport*>> &aux);
 
+    /**
+     * @brief Method that sorts all Airports by their traffic(incoming and accounting edges) and returns a vector with all Airports to index k
+     *
+     * @param k
+     * @return
+     */
     std::vector<Airport*> findTopKAirports(int k); //3.viii
+
+    /**
+     * @brief Method that returns a unordered_set with all the essential Airports using a dfs auxiliary method. Note that this function makes the Network undirected
+     *
+     * @return
+     */
     std::unordered_set<Airport*> articulationAirports();//3.ix
 
+    /**
+     * @brief Method that searches for the airport which has the given code
+     * @details Complexity: O(Log(n))
+     * @param IATA
+     * @return
+     */
     Airport* findAirport(std::string IATA);
+
+    /**
+     * @brief Method that searches for the airport which has the given name
+     * @details Complexity: O(n)
+     * @param AirportName
+     * @return
+     */
     Airport* findAirportByName(std::string AirportName);
+
+    /**
+     * @brief Method that searches for the airports which have the given city name and country name
+     * @details Complexity: O(n)
+     * @param CityName
+     * @param countryName
+     * @return
+     */
     std::vector<Airport*> findAirportsInCity(std::string CityName, std::string countryName);
+
+    /**
+     * @brief Method that searches for the closest Airport/s from a givem coordinate using the Haversine formula
+     * @details Complexity: O(n)
+     * @param latitude
+     * @param longitude
+     * @return
+     */
     std::vector<Airport*> findClosestAirports(float latitude, float longitude);
 
-    Airline findAirline(std::string code);
 
     //**4**
+    /**
+     * @brief method that takes two vectors of airports and combine the airports to get the shortest paths between all of them using
+     * the shortestPaths4() that uses a dijkstra's algorithm
+     * @param airportsStart
+     * @param airportsEnd
+     * @return
+     */
     std::vector<std::vector<Airport *>> shortestPathsAuxiliary(std::vector<Airport*> airportsStart, std::vector<Airport*> airportsEnd);
-
-    std::vector<std::vector<Airport*>> shortestPathsIATA(const std::string& startIATA, const std::string& endIATA);//4.i airportsIAT
-    std::vector<std::vector<Airport*>> shortestPathsIATAtoName(const std::string& startIATA, const std::string& airportNameEnd);
-    std::vector<std::vector<Airport*>> shortestPathsIATAtoCity(const std::string& startIATA, const std::string& cityNameEnd, const std::string& countryEnd);
-    std::vector<std::vector<Airport*>> shortestPathsIATAtoCoord(const std::string& startIATA, float latitudeEnd, float longitudeEnd);
-
-    std::vector<std::vector<Airport*>> shortestPathsName(const std::string& airportNameStart, const std::string& airportNameEnd);//4.i airportsName
-    std::vector<std::vector<Airport*>> shortestPathsNametoIATA(const std::string& airportNameStart, const std::string& endIATA);
-    std::vector<std::vector<Airport*>> shortestPathsNametoCity(const std::string& airportNameStart, std::string CityNameEnd, std::string countryEnd);
-    std::vector<std::vector<Airport*>> shortestPathsNametoCoord(const std::string& airportNameStart, float latitudeEnd, float longitudeEnd);
-
-
-
-    std::vector<std::vector<Airport*>> shortestPathsCityToIATA(std::string CityNameStart, std::string countrystart, const std::string &endIATA);
-    std::vector<std::vector<Airport*>> shortestPathsCityToName(std::string CityNameStart, std::string countrystart, const std::string& airportNameEnd);
-    std::vector<std::vector<Airport*>> shortestPathsCitys(std::string CityNameStart, std::string countrystart, std::string CityNameEnd, std::string countryEnd);//4.ii city names
-    std::vector<std::vector<Airport*>> shortestPathsCityToCoord(std::string CityNameStart, std::string countrystart, float latitudeEnd, float longitudeEnd);
-
-
-    std::vector<std::vector<Airport*>> shortestPathsCoordinates(float latitudeStart, float longitudeStart, float latitudeEnd, float longitudeEnd);//4.iii
-    std::vector<std::vector<Airport*>> shortestPathsCoordinateToIATA(float latitudeStart, float longitudeStart, const std::string& endIATA);
-    std::vector<std::vector<Airport*>> shortestPathsCoordinateToName(float latitudeStart, float longitudeStart, const std::string& airportNameEnd);
-    std::vector<std::vector<Airport*>> shortestPathsCoordinateToName(float latitudeStart, float longitudeStart, std::string CityNameEnd, std::string countryEnd);
 
     // 5
 
@@ -200,3 +262,18 @@ public:
 
 
 #endif //PROJETO_2_NETWORK_H
+
+
+/**
+ * \mainpage  Air Travel Management Documentation
+ *
+ * \section intro_sec Introduction
+ * Welcome to the documentation for our project developed for the curricular unit AED 23/24.
+ * This project was created by Antero Morgado(up202204971@fe.up.pt), Hugo Cruz(up202205022@fe.up.pt), and Tomás Telmo(up202206091@fe.up.pt).
+ * We hope you find this documentation helpful and enjoy exploring the features of our project.
+ *
+ * \section features_sec Features
+ * Our project includes a set of features designed to meet the requirements outlined in the project description.
+ *
+ * For detailed information, please refer to the specific sections and classes in the documentation.
+ */

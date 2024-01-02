@@ -725,8 +725,8 @@ void Menu::flightTripWithMostStops(Network network) {
 
     for(auto airportsPair: airportsSourceAndDest) {
        cout << "│                                             │\n";
-        cout <<"| Source: "<<setw(36)<<std::left<<airportsPair.first->getName() <<"│\n";
-        cout <<"| Dest: "<<setw(38)<<std::left<<airportsPair.second->getName() <<"│\n";
+        cout <<"│ Source: "<<setw(36)<<std::left<<airportsPair.first->getName() <<"│\n";
+        cout <<"│ Dest: "<<setw(38)<<std::left<<airportsPair.second->getName() <<"│\n";
     }
 
     cout << "│                                             │\n"

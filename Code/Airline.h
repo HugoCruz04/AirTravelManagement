@@ -24,6 +24,7 @@ public:
      * @param country Country where the airline is based.
      */
     Airline(std::string code, std::string name, std::string callsign, std::string country);
+    Airline(std::string code);
 
     /**
      * @brief Getter for the airline name.

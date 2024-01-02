@@ -1,0 +1,24 @@
+var searchData=
+[
+  ['getairline_14',['getAirline',['../class_flight.html#adcc829ffb939411bcdf440c3882d3f44',1,'Flight']]],
+  ['getairlinesnum_15',['getAirlinesNum',['../class_airport.html#aa4734024ac12e41337b35ec28fbcefb8',1,'Airport']]],
+  ['getairportsnum_16',['getAirportsNum',['../class_network.html#a76165b90074975e43391eab607eaa663',1,'Network']]],
+  ['getcallsign_17',['getCallsign',['../class_airline.html#aa0219926dd0151332c9e309036e345d3',1,'Airline']]],
+  ['getcode_18',['getCode',['../class_airline.html#ae3a78341e134ede353f32e060033c4ee',1,'Airline']]],
+  ['getcountry_19',['getCountry',['../class_airline.html#a73e2c48e0d98eda7417b4a256881e6f1',1,'Airline']]],
+  ['getdest_20',['getDest',['../class_flight.html#ad8734a5161240adad54dd6a52c81fe9b',1,'Flight']]],
+  ['getdestnumfrom_21',['getDestNumFrom',['../class_network.html#a60c4828f88779efd67b3516cf8197818',1,'Network']]],
+  ['getdestnumfromatdist_22',['getDestNumFromAtDist',['../class_network.html#a1783cb9e483c50430549ff4d59361be0',1,'Network']]],
+  ['getflights_23',['getFlights',['../class_airport.html#a04e8263450e05ca38cd6b776baea73f4',1,'Airport']]],
+  ['getfligthsnum_24',['getFligthsNum',['../class_network.html#aeceaf1196677f4789749bf711634bbd9',1,'Network']]],
+  ['getfligthsnumperairline_25',['getFligthsNumPerAirline',['../class_network.html#a5880551433994bb2e8b27e2fc7fb5827',1,'Network']]],
+  ['getfligthsnumpercity_26',['getFligthsNumPerCity',['../class_network.html#acde7a0990b7fcfbe1d808b27bd9474b6',1,'Network']]],
+  ['getindegree_27',['getIndegree',['../class_airport.html#af9ef466c3cfdb75d4be134b2d5ae1ae4',1,'Airport']]],
+  ['getlow_28',['getLow',['../class_airport.html#afc45e496823c8a26c37b829c2ff09803',1,'Airport']]],
+  ['getmaxstopsbetweenairports_29',['getMaxStopsBetweenAirports',['../class_network.html#ade91a4d172952f8a38bf77d3d30f1426',1,'Network']]],
+  ['getname_30',['getName',['../class_airline.html#aaaabbcbd34ed54234915325e91af0148',1,'Airline']]],
+  ['getnum_31',['getNum',['../class_airport.html#a7a2f56a5f9ceb88b746a7799180df566',1,'Airport']]],
+  ['getsource_32',['getSource',['../class_flight.html#a4817a864d4a80d89b51f4ff8f4414bb0',1,'Flight']]],
+  ['gettarget_33',['getTarget',['../class_flight.html#a30d888419e2d0b3cb4d9e0730b4a4182',1,'Flight']]],
+  ['gettrafic_34',['getTrafic',['../class_airport.html#ad728c4c4914702ceb1e680d0472fa12e',1,'Airport']]]
+];

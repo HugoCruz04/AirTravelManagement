@@ -1832,49 +1832,58 @@ void Menu::insertDestAirportCoordinates(Network network, Network newNetwork, std
 }
 
 void Menu::createBestFlightOption(Network network, Network newNetwork, std::vector<Airline> airlines,std::vector<Airport *> sourceAirportList, std::vector<Airport *> destAirportList) {
-    std::vector<std::vector<Airport *>> shortestPathList = newNetwork.shortestPathsAuxiliary(sourceAirportList,destAirportList);
+    std::vector<std::vector<Airport *>> shortestPathList = newNetwork.shortestPathsAuxiliary(sourceAirportList,
+                                                                                             destAirportList);
+
+    if(shortestPathList.empty()){
+        cout << "╒═════════════════════════════════════════════╕\n"
+                "│             Best flight options             │\n"
+                "╞═════════════════════════════════════════════╡\n"
+                "│ There are no available flights for the      │\n"
+                "│ criteria provided                           │\n";
+    }
 
 
-    cout << "╒═════════════════════════════════════════════╕\n"
-            "│             Best flight options             │\n"
-            "╞═════════════════════════════════════════════╡\n"
-            "│ The best flight options between the given   │\n"
-            "│ locations is:                               │\n"
-            ;
+    else {
 
-    int i = 1;
 
-    for(std::vector<Airport *> trip : shortestPathList){
+        cout << "╒═════════════════════════════════════════════╕\n"
+                "│             Best flight options             │\n"
+                "╞═════════════════════════════════════════════╡\n"
+                "│ The best flight options between the given   │\n"
+                "│ locations is:                               │\n";
 
-        cout << "│                                             │\n"
-                "│ Trip option # "<<setw(2)<<left<<i<<":                           │\n";
+        int i = 1;
 
-        int j = 0;
-        int size = trip.size();
+        for (std::vector<Airport *> trip: shortestPathList) {
 
-        for(Airport* airport : trip){
-            if(j == 0){
-                cout << "│   Starting at: " << airport->getIATA() << "                          │\n"
-                                                                     "│                                             │\n";
+            cout << "│                                             │\n"
+                    "│ Trip option # " << setw(2) << left << i << ":                           │\n";
 
+            int j = 0;
+            int size = trip.size();
+
+            for (Airport *airport: trip) {
+                if (j == 0) {
+                    cout << "│   Starting at: " << airport->getIATA() << "                          │\n"
+                                                                         "│                                             │\n";
+
+                } else if (j == size - 1) {
+                    cout << "│                                             │\n"
+                            "│   Arriving at: " << airport->getIATA() << "                          │\n";
+
+                } else {
+                    cout << "│   Stopping at: " << airport->getIATA() << "                          │\n";
+                }
+
+
+                j++;
             }
 
-            else if(j == size - 1){
-                cout << "│                                             │\n"
-                        "│   Arriving at: " << airport->getIATA() << "                          │\n";
-
-            }
-
-            else{
-                cout << "│   Stopping at: " << airport->getIATA() << "                          │\n";
-            }
-
-
-            j++;
+            cout << "│                                             │\n";
+            i++;
         }
 
-        cout << "│                                             │\n";
-        i++;
     }
 
     cout << "│                                             │\n"

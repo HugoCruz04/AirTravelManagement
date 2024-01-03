@@ -498,7 +498,7 @@ std::vector<std::vector<Airport*>> shortestPaths4(Airport* startAirport,Airport*
         Airport* currentNode = currentPath.back();
 
         // If we reached the end airport, add the path to the set of unique paths
-        if (currentNode == endAirport) {
+        if (currentNode->getIATA() == endAirport->getIATA()) {
             uniquePaths.insert(currentPath);
         }
 

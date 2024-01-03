@@ -64,7 +64,7 @@ void Menu::statistics(Network network) {
             "│                                             │\n"
             "│ > Check airport statistics              [1] │\n"
             "│ > Check number of flights (w/ filters)  [2] │\n"
-            "│ > Number of countries a city flies to   [3] │\n" //iv pt2
+            "│ > Number of countries a city flies to   [3] │\n"
             "│ > Flight trip(s) with the most stops    [4] │\n"
             "│                                             │\n"
             "│                                             │\n"
@@ -287,7 +287,7 @@ void Menu::flightsPerAirport(Network network, Airport* airport) {
 void Menu::availableCountriesForAnAirport(Network network, Airport *airport) {
 
     cout << "╒═════════════════════════════════════════════╕\n"
-            "│             Available destinations          │\n"
+            "│             Available Countries             │\n"
             "╞═════════════════════════════════════════════╡\n"
             "│ " <<airport->getIATA()<<" has available flights to:               │\n"
             "│ "<< setw(3)<<left<<network.numberOfCountriesAnAirportFliesTo(airport->getIATA()) <<" countries                               │\n"
@@ -525,7 +525,7 @@ void Menu::flightStatistics(Network network) {
             break;
         case 2:
             nextPage();
-            //todo;
+            insertCountryAndCityName(network,1);
             break;
     }
 }
@@ -545,7 +545,7 @@ void Menu::insertAirlineName(Network network) {
     getline(cin, cmd);
     string airlineName = cmd;
 
-    if(network.getFligthsNumPerAirline(airlineName) == 0){ //
+    if(network.getFligthsNumPerAirline(airlineName) == 0){
         cout<<"ERROR: The provided airline has no flights or was not found\n\n> Back [0]                       > Retry [r] \n";
         getline(cin, cmd);
 
@@ -688,7 +688,7 @@ void Menu::flightsPerCity(Network network, std::string cityName, std::string cou
 
 void Menu::availableCountriesForACity(Network network, std::string cityName, std::string countryName) {
     cout << "╒═════════════════════════════════════════════╕\n"
-            "│             Flights per City                │\n"
+            "│        Number of reachable countries        │\n"
             "╞═════════════════════════════════════════════╡\n"
             "│ The referred city has currently flights to  │\n"
             "│        " << setw(3)<<left<<network.numberOfCountriesACityFliesTo(cityName, countryName) << " different countries              │\n"
@@ -703,7 +703,7 @@ void Menu::availableCountriesForACity(Network network, std::string cityName, std
 
     if(cmd == "0"){
         nextPage();
-        flightStatistics(network);
+        statistics(network);
     }
 
     while(cmd !="q" && cmd != "0"){
@@ -1224,7 +1224,7 @@ void Menu::createBestFlightOption(Network network, std::vector<Airport *> source
     getline(cin, cmd);
     if (cmd=="q") quit();
 
-    while(cmd !="q" && cmd != "0" && cmd!="1" && cmd!="2"){
+    while(cmd !="q" && cmd != "0"){
         cout<<"ERROR: Choose a valid option \n";
         getline(cin, cmd);
     }
@@ -1251,7 +1251,7 @@ void Menu::bestFlightOptionWithFilters(Network network) {
     getline(cin, cmd);
     if (cmd=="q") quit();
 
-    while(cmd !="q" && cmd != "0" && cmd!="1" && cmd!="2"){
+    while(cmd !="q" && cmd != "0" && cmd!="1" ){
         cout<<"ERROR: Choose a valid option \n";
         getline(cin, cmd);
     }
@@ -1409,7 +1409,7 @@ void Menu::removeAirline(Network network, std::vector<Airline> airlines) {
     getline(cin, cmd);
     string airlineCode = cmd;
 
-    if(network.getFligthsNumPerAirline(airlineCode) == 0){ //
+    if(network.getFligthsNumPerAirline(airlineCode) == 0){
         cout<<"ERROR: The provided airline has no flights or was not found\n\n> Back [0]                       > Retry [r] \n";
         getline(cin, cmd);
 
@@ -1895,7 +1895,7 @@ void Menu::createBestFlightOption(Network network, Network newNetwork, std::vect
     getline(cin, cmd);
     if (cmd=="q") quit();
 
-    while(cmd !="q" && cmd != "0" && cmd!="1" && cmd!="2"){
+    while(cmd !="q" && cmd != "0"){
         cout<<"ERROR: Choose a valid option \n";
         getline(cin, cmd);
     }

@@ -86,7 +86,6 @@ public:
      * @param fileName
      */
     void readAirlines(const std::string fileName);
-    void loadNetwork(const std::string aiportsFileName, const std::string flightsFileName);
 
     /**
      * @brief 3.i Method that return the number of Airports in a Network (size of the Airports vector)
@@ -246,19 +245,8 @@ public:
     std::vector<std::vector<Airport *>> shortestPathsAuxiliary(std::vector<Airport*> airportsStart, std::vector<Airport*> airportsEnd);
 
     // 5
-
-    Network filterByAirlines(std::vector<Airline> airlines);       /*  Parameters:
-                                                                -set of chosen airlines
-                                                    Returns new Network with flights filtered
-                                                    by the chosen airlines.*/
-    std::vector<std::vector<Flight>> minAirline(std::string startIATA, std::string destIATA); // return the flights in path
-                                                                            //using the minimum amount of airlines
-                                                                            //parameteres should be the output of fucntions in ex 4//
-    void airlineDFS(Airport* start, Airport* current, Airport* dest, std::vector<std::vector<Flight>>& paths, std::vector<Flight>& currentPath);
+    Network filterByAirlines(std::vector<Airline> airlines);
  };
-
-
-
 
 
 #endif //PROJETO_2_NETWORK_H

@@ -242,22 +242,6 @@ void Network::addAirport(std::string IATA, std::string name, std::string city, s
 }
 
 
-/*void nodesAtDistanceDFSVisit(const Network *g, Airport *v, int k, set<std::string> &airportsIATAs, set<std::string> &citiesNames, set<std::string> &countriesNames) {
-
-    if(k==0) {
-        airportsIATAs.insert(v->getIATA());
-        citiesNames.insert(v->getCity());
-        countriesNames.insert(v->getCountry());
-        return ;
-    }
-    v->setVisited(true);
-
-    for(auto &e: v->getFlights()) {
-        auto w=e.getDest();
-        if(!w->isVisited()) nodesAtDistanceDFSVisit(g, w,k-1,airportsIATAs, citiesNames, countriesNames);
-    }
-}*/
-
 void Network::getDestNumFromAtDist(std::string IATA, int distance,int &airports, int &cities, int &countries) {
     std::set<std::string> airportsIATAs;
     std::set<pair<string,string >> citiesNames;
@@ -567,51 +551,3 @@ Network Network::filterByAirlines(vector<Airline> const airlines){
     }
     return newNetwork;
 }
-
-
-
-/*
-std::vector<vector<Flight>> Network::minAirline(std::string startIATA, std::string destIATA) {
-    std::vector<std::vector<Flight>> ans;
-    for(auto a: this->getAirports()) a->setVisited(false);
-    std::vector<std::vector<Flight>> paths;
-    int min= this->getAirlines().size();
-    Airport* start= findAirport(startIATA);
-    vector<Flight> currentPath;
-    airlineDFS(start, start, findAirport(destIATA), paths,currentPath);
-    for(auto path : paths){
-        int count=0;
-        unordered_set<string> usedAirlines;
-        for(auto f: path){
-            if(usedAirlines.find(f.getAirline())==usedAirlines.end()){
-                count++;
-                usedAirlines.insert(f.getAirline());
-            }
-        }
-        if(count==min){
-            ans.push_back(path);
-        }
-        else if(count<min){
-            min=count;
-            ans.clear();
-            ans.push_back(path);
-        }
-    }
-    return ans;
-}
-
-void Network::airlineDFS(Airport* start, Airport* current, Airport* dest, std::vector<std::vector<Flight>>& paths, vector<Flight>& currentPath) {
-    current->setVisited(true);
-    for(Flight flight : current->getFlights()) {
-        auto next=flight.getDest();
-        vector<Flight> thisPath=currentPath;
-        thisPath.push_back(flight);
-        if(next->getIATA()==dest->getIATA()){
-            currentPath.push_back( flight);
-            paths.push_back(currentPath);
-        }
-        else if(!next->isVisited()) airlineDFS(start,next,dest,paths,thisPath);
-    }
-}
-
-*/

@@ -33,16 +33,6 @@ struct PairHash {
     }
 };
 
-/*
-int Airport::getFlightsNum() const {
-    std::unordered_set<pair<string,string>,PairHash> uniqueCombinations;
-    for (Flight flight : flights) {
-        pair<string, string> p = {flight.getSource(), flight.getTarget()};
-        uniqueCombinations.insert(p);
-    }
-    return uniqueCombinations.size();
-}*/
-
 int Airport::getAirlinesNum() const {
     std::unordered_set<string> uniqueCombinations;
     for (Flight flight : flights) {

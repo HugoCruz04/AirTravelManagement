@@ -452,10 +452,8 @@ void Menu::topKAirport(Network network, int k) {
 }
 
 void Menu::essentialAirports(Network network) {
-    Network temp;
-    temp.readAiports("dataset/airports.csv");
-    temp.readFlights("dataset/flights.csv");
-    std::unordered_set<Airport*> airportList = temp.articulationAirports();
+
+    std::unordered_set<Airport*> airportList = network.articulationAirports();
 
     cout << "╒═════════════════════════════════════════════╕\n"
             "│              Essential Airports             │\n"
